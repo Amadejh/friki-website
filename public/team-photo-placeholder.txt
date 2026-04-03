@@ -1,0 +1,5 @@
+Replace this file with your actual team photo.
+Name it: team-photo.jpg
+Place it in the public/ folder.
+Recommended size: 1600x686px or wider, landscape orientation.
+The image will be displayed at full width with 50% opacity over a dark background.

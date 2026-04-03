@@ -1,0 +1,62 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "Edit(*)",
+      "Write(*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(cat | jq -r '.tool_input.file_path // .tool_input.path // empty' 2>/dev/null); if [ -n \"$FILE\" ] && echo \"$FILE\" | grep -qE '\\.(tsx|ts)$' && ! echo \"$FILE\" | grep -qE 'node_modules|\\.d\\.ts$'; then cd \"$CLAUDE_PROJECT_DIR\" && npx tsc --noEmit 2>&1 | head -30 || true; fi"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "CMD=$(cat | jq -r '.tool_input.command // empty' 2>/dev/null); if echo \"$CMD\" | grep -qE 'rm -rf /|DROP TABLE|git push --force|git reset --hard HEAD~[2-9]|DELETE FROM|TRUNCATE'; then echo 'Blocked: destructive command requires manual confirmation' >&2; exit 2; fi; exit 0"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(cat | jq -r '.tool_input.file_path // .tool_input.path // empty' 2>/dev/null); if echo \"$FILE\" | grep -qE '\\.env(\\.local|\\.production)?$'; then echo 'Blocked: direct .env file edits are not allowed — update .env.example and remind the user to update .env.local manually' >&2; exit 2; fi; exit 0"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "BRANCH=$(git branch --show-current 2>/dev/null || echo 'unknown'); COMMIT=$(git log -1 --format='%s' 2>/dev/null || echo 'unknown'); echo \"{\\\"additionalContext\\\": \\\"Git branch: $BRANCH | Last commit: $COMMIT\\\"}\""
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "INPUT=$(cat); if [ \"$(echo \"$INPUT\" | jq -r '.stop_hook_active' 2>/dev/null)\" = 'true' ]; then exit 0; fi; echo 'Reminder: if you changed application code, run /wrap to update SESSION_CONTEXT.md and commit.' >&2; exit 0"
+          }
+        ]
+      }
+    ]
+  }
+}
