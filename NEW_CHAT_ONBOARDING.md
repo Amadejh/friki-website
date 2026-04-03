@@ -18,7 +18,7 @@ Reading all four takes about 90 seconds and gives complete context. Do not skip.
 
 ## THE PROJECT IN ONE PARAGRAPH
 
-FRIKi is the student council of UL FRI (Faculty of Computer and Information Science, Ljubljana, Slovenia). This website is their public-facing presence: upcoming events, Stripe ticket sales, past events gallery, and a merch store shell. Stack: Next.js 16 App Router, React 19, TypeScript, Tailwind CSS v4, shadcn/ui (new-york), IBM Plex fonts. Services: Supabase (database + storage), Stripe (payments), Resend (email). Deployed to Vercel. Bilingual SL/EN in Phase 2 via next-intl. Dark-only theme with a red accent palette.
+FRIKi is the student council of UL FRI (Faculty of Computer and Information Science, Ljubljana, Slovenia). **Shipped today:** a light-themed marketing site — homepage (hero, events carousel, archive with search/modal), event detail pages from mock data (`lib/data.ts`), SL/EN via React Context + `localStorage`. **Not shipped yet:** Stripe, Supabase, Resend, API routes, `/events` list, merch/past-events pages. Stack: Next.js 16 App Router, React 19, TypeScript, Tailwind v4, shadcn/ui (new-york) in `components/ui/` (not yet used by pages), IBM Plex fonts. **Planned services:** Supabase, Stripe, Resend. **Target host:** Vercel. **Phase 2:** URL-based SL/EN with next-intl (replace context-only toggle).
 
 ---
 
@@ -139,17 +139,15 @@ STEP N — Wire + verify + document
 
 ---
 
-## CURRENT STATE SUMMARY (as of Session 0)
+## CURRENT STATE SUMMARY (as of Session 2)
+
+See `SESSION_CONTEXT.md` for the full phase table. In short: **Phase 1a–1e are done** (light theme, layout, hero, homepage sections, event detail). **Next:** lib scaffolding for Supabase/Stripe/Resend (Phase 1f), then `/events` index and backend flows.
 
 ```
-Phase 0  ✅  Scaffold — Next.js 16, shadcn/ui, IBM Plex fonts, basic components exist
-Phase 1a ⬜  Dark theme — globals.css CSS variables (START HERE)
-Phase 1b ⬜  Layout — Navbar dark, mobile menu, Footer
-Phase 1c ⬜  Hero — full-bleed redesign, FRIKi logo
+Phase 1a–1e ✅  Light UI, nav/footer, hero, carousel, archive, /events/[slug]
+Phase 1f ⬜    Lib scaffolding (config + SDK clients with placeholders)
 ...
 ```
-
-**What needs to happen first:** Create `dev` branch, then `feature/ui-dark-theme`, then build Phase 1a.
 
 ---
 
@@ -167,7 +165,7 @@ Phase 1c ⬜  Hero — full-bleed redesign, FRIKi logo
 
 ## COMMON MISTAKES TO AVOID (from SELF_IMPROVEMENT_LOG)
 
-1. **Tailwind v4 syntax** — use `@import "tailwindcss"`, not the v3 directives. Design tokens in `@theme {}`.
+1. **Tailwind v4 syntax** — use `@import "tailwindcss"`, not the v3 directives. Project tokens in `@theme inline {}` (see `app/globals.css`).
 2. **SDK init with empty keys** — always add `|| 'placeholder_value'` fallbacks so builds pass without real keys.
 3. **Server secrets in client files** — `.server.ts` files are API-route-only. Never import in pages or components.
 4. **Stripe webhook raw body** — use `req.text()` not `req.json()` before `stripe.webhooks.constructEvent()`.
@@ -191,4 +189,4 @@ Claude Code will execute all shell commands, file edits, and writes without aski
 ---
 
 *This file is the starting point for every claude.ai strategy session.*
-*Last updated: Session 0 — April 3, 2026*
+*Last updated: Session 2 — April 3, 2026*
