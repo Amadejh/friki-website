@@ -1,37 +1,26 @@
 # FRIKi Website
 
-Public-facing website for FRIKi — the student council (Študentski svet FRI) of the Faculty of Computer and Information Science at the University of Ljubljana (UL FRI), Slovenia. The site handles event promotion, ticket sales (planned), and community connection for the FRI student body.
+Public-facing website for FRIKi (Študentski svet FRI), the student council of UL FRI (Faculty of Computer and Information Science, University of Ljubljana). Handles event promotion, with ticket sales and community features planned.
 
-## Tech stack
+## Stack
 
-- **Next.js 16** (App Router) · **TypeScript** (strict)
-- **Tailwind CSS v4** · **shadcn/ui** (new-york)
-- **IBM Plex Sans** + **IBM Plex Mono** (via `next/font/google`)
-- **Supabase** · **Stripe** · **Resend** — planned; not yet wired
+Next.js 16 · TypeScript · Tailwind CSS v4 · shadcn/ui (new-york) · IBM Plex Sans + Mono · Supabase (planned) · Stripe (planned) · Resend (planned)
+
+**Hosting target:** Vercel
 
 ## Setup
 
-1. Clone the repo:
-   ```bash
-   git clone <repo-url>
-   cd website
-   ```
+```bash
+git clone <repo-url>
+cd friki-website
+npm install
+cp .env.example .env.local   # fill in values when services are connected
+npm run dev                  # → http://localhost:3000
+```
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+> Backend services (Supabase, Stripe, Resend) are not yet wired. The app runs fully on mock data with no env vars required.
 
-3. Copy the env template:
-   ```bash
-   cp .env.example .env.local
-   ```
-   Fill in values when backend services are connected.
+## Docs
 
-4. Start the dev server:
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000).
-
-> **Note:** Backend services (Supabase, Stripe, Resend) are not yet wired — the app runs fully on mock data without any env vars set.
+- [`SESSION_CONTEXT.md`](SESSION_CONTEXT.md) — current build state and phase tracker
+- [`PROJECT_OVERVIEW.md`](PROJECT_OVERVIEW.md) — architecture decisions and feature spec
