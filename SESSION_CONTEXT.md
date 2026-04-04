@@ -1,6 +1,6 @@
 # FRIKI WEBSITE — Session Context
 *Read this before every Claude Code session. Source of truth for current build state.*
-*Last updated: Session 3 — April 4, 2026*
+*Last updated: Session 4 — April 4, 2026*
 
 ---
 
@@ -28,10 +28,11 @@ Phase 3  ⬜  Admin UI — password-protected event/gallery management (future)
 
 ## GIT WORKFLOW
 
-**Active branches:** `main`, **`feature/ui-palette-dimmed`** (current palette + token cleanup).
+**Active branches:** `main`
 
-**Current branch:** `feature/ui-palette-dimmed`  
-**Last commit on main:** `chore: rewrite all docs to match actual codebase, fix minor code issues`
+**Current branch:** `main`  
+**Last commit on main:** `docs: add README for contributor onboarding`  
+**Merged:** `feature/ui-palette-dimmed` → `main` (Session 4)
 
 **Branch naming:** `feature/ui-*`, `feature/*`, `feature/api-*`, `fix/*`, `feature/i18n-*`, `chore/*`
 
@@ -113,6 +114,12 @@ Then: `/events` index (Phase 1g), Stripe flow (1h–1i), remaining pages (1j), S
 ---
 
 ## SESSION LOG
+
+### Session 4 — April 4, 2026 — Merge + README (`main`)
+
+- Merged `feature/ui-palette-dimmed` into `main` with `--no-ff`.
+- Added `README.md` with project description, tech stack, and setup instructions.
+- No remote configured yet — `git push origin main` is a pending step when a GitHub remote is added.
 
 ### Session 3 — April 4, 2026 — Palette shift + token cleanup (`feature/ui-palette-dimmed`)
 
