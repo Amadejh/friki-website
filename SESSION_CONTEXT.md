@@ -31,7 +31,8 @@ Phase 3  ⬜  Admin UI — password-protected event/gallery management (future)
 **Active branches:** `main`
 
 **Current branch:** `main`  
-**Last commit on main:** `docs: add README for contributor onboarding`  
+**Remote:** `https://github.com/Amadejh/friki-website.git`  
+**Last commit on main:** `docs: update README — tighter spec, add doc pointers`  
 **Merged:** `feature/ui-palette-dimmed` → `main` (Session 4)
 
 **Branch naming:** `feature/ui-*`, `feature/*`, `feature/api-*`, `fix/*`, `feature/i18n-*`, `chore/*`
