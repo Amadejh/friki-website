@@ -39,7 +39,7 @@ export default function Footer() {
   return (
     <footer
       id="contact"
-      className="w-full bg-[#E8E5E0] border-t border-[#B8B4AE] pb-28 md:pb-36"
+      className="w-full bg-card border-t border-border pb-28 md:pb-36"
       aria-label="Site footer"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 md:py-16">
@@ -50,21 +50,21 @@ export default function Footer() {
             <Link
               href="/"
               onClick={(e) => handleNavClick(e, '/')}
-              className="text-[#3D3C3A] text-xl font-bold tracking-tight hover:text-[#EE352F] transition-colors w-fit font-mono"
+              className="text-foreground text-xl font-bold tracking-tight hover:text-primary transition-colors w-fit font-mono"
             >
               Friki
             </Link>
-            <p className="text-[#787470] text-sm leading-relaxed max-w-xs">
+            <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
               {t.footer.desc[lang]}
             </p>
-            <p className="text-[#B8B4AE] text-xs font-mono">
+            <p className="text-border text-xs font-mono">
               Večna pot 113, 1000 Ljubljana, SI
             </p>
           </div>
 
           {/* Quick links */}
           <nav aria-label="Footer navigation">
-            <p className="text-[#B8B4AE] font-mono text-xs uppercase tracking-[0.2em] mb-5">
+            <p className="text-border font-mono text-xs uppercase tracking-[0.2em] mb-5">
               {t.footer.navigate[lang]}
             </p>
             <ul className="flex flex-col gap-2.5">
@@ -73,7 +73,7 @@ export default function Footer() {
                   <Link
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className="text-[#787470] text-sm hover:text-[#3D3C3A] transition-colors duration-150"
+                    className="text-muted-foreground text-sm hover:text-foreground transition-colors duration-150"
                   >
                     {link.label}
                   </Link>
@@ -84,7 +84,7 @@ export default function Footer() {
 
           {/* Social */}
           <div>
-            <p className="text-[#B8B4AE] font-mono text-xs uppercase tracking-[0.2em] mb-5">
+            <p className="text-border font-mono text-xs uppercase tracking-[0.2em] mb-5">
               {t.footer.connect[lang]}
             </p>
             <div className="flex items-center gap-3">
@@ -95,17 +95,17 @@ export default function Footer() {
                   target={href.startsWith('mailto') ? undefined : '_blank'}
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-8 h-8 rounded-sm flex items-center justify-center text-[#787470] border border-[#B8B4AE] bg-white hover:text-[#EE352F] hover:border-[#EE352F] transition-all duration-150"
+                  className="w-8 h-8 rounded-md flex items-center justify-center text-muted-foreground border border-border bg-white hover:text-primary hover:border-primary transition-all duration-150"
                 >
                   <Icon size={14} />
                 </a>
               ))}
             </div>
-            <p className="mt-6 text-[#787470] text-sm leading-relaxed">
+            <p className="mt-6 text-muted-foreground text-sm leading-relaxed">
               {t.footer.questions[lang]}{' '}
               <a
                 href="mailto:friki@fri.uni-lj.si"
-                className="text-[#3D3C3A] hover:text-[#EE352F] underline underline-offset-2 transition-colors"
+                className="text-foreground hover:text-primary underline underline-offset-2 transition-colors"
               >
                 {t.footer.getInTouch[lang]}
               </a>
@@ -114,11 +114,11 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-[#B8B4AE] flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-[#B8B4AE] text-xs font-mono">
+        <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-border text-xs font-mono">
             &copy; 2025–2026 Friki &ndash; Študentski svet FRI
           </p>
-          <p className="text-[#B8B4AE] text-xs font-mono">
+          <p className="text-border text-xs font-mono">
             FRI &middot; Univerza v Ljubljani
           </p>
         </div>

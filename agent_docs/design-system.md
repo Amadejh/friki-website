@@ -1,6 +1,6 @@
 # Design System
 *Read this before: writing any CSS, globals.css changes, Tailwind classes, or visual components.*
-*Source of truth: `app/globals.css`. Last verified: Session 2 — April 3, 2026.*
+*Source of truth: `app/globals.css`. Last verified: Session 3 — April 4, 2026.*
 
 ---
 
@@ -12,22 +12,35 @@ All raw tokens are defined in `app/globals.css` `:root {}` and aliased to shadcn
 
 | Raw Token | Hex | Usage |
 |---|---|---|
-| `--white` | `#FFFFFF` | Page background, card surfaces, modals |
-| `--light-grey` | `#E8E5E0` | Section backgrounds (EventsCarousel), input fills |
-| `--mid-grey` | `#B8B4AE` | All borders, dividers, placeholders |
+| `--white` | `#FFFFFF` | Contrast surfaces: navbar pill container, modal bg, mobile drawer, social icon bg, sidebar icon bg |
+| `--light-grey` | `#E8E5E0` | **Page background** — all sections, footer, hero strip, search input |
+| `--mid-grey` | `#B8B4AE` | All borders, dividers, placeholder text, eyebrow/meta labels |
 | `--ash-grey` | `#787470` | Secondary/muted text, icons, metadata |
 | `--charcoal` | `#3D3C3A` | Primary text, headings |
 | `--deep-red` | `#EE352F` | CTAs, active nav pills, category badges, accent icons |
+| *(no raw token)* | `#D4D1CC` | Card/surface bg — slightly darker than page background |
+| *(no raw token)* | `#C42A26` | Hover state on deep-red buttons — `bg-deep-red-dark` |
 
 ### Design token aliases (shadcn names)
 
 ```
---background      → var(--white)       → bg-background / bg-white
+--background      → var(--light-grey)  → bg-background  (#E8E5E0 — page bg)
 --foreground      → var(--charcoal)    → text-foreground
---card            → var(--light-grey)  → bg-card
+--card            → #D4D1CC            → bg-card         (event detail sidebar, card surfaces)
 --border          → var(--mid-grey)    → border-border
 --muted-foreground→ var(--ash-grey)    → text-muted-foreground
 --primary         → var(--deep-red)    → bg-primary / text-primary
+--primary-foreground → var(--white)    → text-primary-foreground  (text on red buttons/badges)
+```
+
+Registered Tailwind tokens (available as utility classes):
+```
+bg-deep-red-dark   → #C42A26   (hover state for primary buttons — use instead of hardcoded hex)
+bg-deep-red        → #EE352F   (same as bg-primary but raw)
+bg-light-grey      → #E8E5E0
+bg-charcoal        → #3D3C3A
+bg-mid-grey        → #B8B4AE
+bg-ash-grey        → #787470
 ```
 
 ### Token pipeline
@@ -41,11 +54,20 @@ app/globals.css
 Raw tokens in `@theme inline` are also available as Tailwind classes:
 `bg-deep-red`, `text-charcoal`, `bg-light-grey`, etc.
 
-### Tech debt
-Components currently use hardcoded hex values (e.g. `text-[#EE352F]`, `bg-[#E8E5E0]`) instead
-of CSS variables or Tailwind semantic classes. This is known tech debt. A future refactor pass
-should replace all hardcoded hex with `text-primary`, `bg-card`, etc. Do NOT add new hardcoded
-hex to components — use semantic classes or `text-[var(--deep-red)]` instead.
+### Intentional carve-outs (keep as `bg-white`)
+These surfaces must stay white to contrast against the warm-grey page background:
+- Navbar pill container + language toggle container
+- Mobile drawer background
+- Carousel prev/next buttons (`bg-white/95`)
+- Archive prev/next buttons (`bg-white/95`)
+- Carousel event cards (white cards on warm-grey section)
+- Archive modal background
+- Event detail sidebar icon squares
+
+### No remaining hardcoded hex tech debt
+All six components (`navbar`, `hero`, `footer`, `events-carousel`, `archive`, `event-detail-view`)
+have been converted to semantic tokens. Do NOT introduce new `[#hex]` values — use the token
+table above instead.
 
 ---
 
