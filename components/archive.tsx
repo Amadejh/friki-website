@@ -123,16 +123,16 @@ export default function Archive() {
   return (
     <section
       id="archive"
-      className="w-full bg-white border-t border-[#B8B4AE] py-16 md:py-24"
+      className="w-full bg-background border-t border-border py-16 md:py-24"
       aria-label={t.archive.heading[lang]}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Heading */}
         <div className="mb-6 md:mb-10">
-          <p className="text-[#EE352F] text-xs font-semibold uppercase tracking-[0.2em] mb-3 font-mono">
+          <p className="text-primary text-xs font-semibold uppercase tracking-[0.2em] mb-3 font-mono">
             {t.archive.eyebrow[lang]}
           </p>
-          <h2 className="text-[#3D3C3A] text-3xl md:text-4xl font-bold tracking-tight leading-none">
+          <h2 className="text-foreground text-3xl md:text-4xl font-bold tracking-tight leading-none">
             {t.archive.heading[lang]}
           </h2>
         </div>
@@ -144,7 +144,7 @@ export default function Archive() {
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t.archive.searchPlaceholder[lang]}
             aria-label={t.archive.searchLabel[lang]}
-            className="w-full px-4 py-3 rounded-sm bg-[#E8E5E0] border border-[#B8B4AE] text-[#3D3C3A] placeholder:text-[#B8B4AE] outline-none focus:border-[#EE352F] transition-colors"
+            className="w-full px-4 py-3 rounded-sm bg-background border border-border text-foreground placeholder:text-border outline-none focus:border-primary transition-colors"
           />
         </div>
 
@@ -156,7 +156,7 @@ export default function Archive() {
               onClick={() => setCurrentPage((p) => Math.max(0, p - 1))}
               disabled={currentPage === 0}
               aria-label={t.archive.prevPage[lang]}
-              className="flex items-center justify-center absolute left-0 top-1/2 -translate-y-1/2 w-9 h-20 md:w-12 md:h-24 rounded-full bg-white/95 border border-[#B8B4AE] text-[#787470] shadow-sm hover:border-[#EE352F] hover:text-[#EE352F] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center justify-center absolute left-0 top-1/2 -translate-y-1/2 w-9 h-20 md:w-12 md:h-24 rounded-full bg-white/95 border border-border text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <ChevronLeft size={18} />
             </button>
@@ -168,7 +168,7 @@ export default function Archive() {
               onClick={() => setCurrentPage((p) => Math.min(slides.length - 1, p + 1))}
               disabled={currentPage >= slides.length - 1}
               aria-label={t.archive.nextPage[lang]}
-              className="flex items-center justify-center absolute right-0 top-1/2 -translate-y-1/2 w-9 h-20 md:w-12 md:h-24 rounded-full bg-white/95 border border-[#B8B4AE] text-[#787470] shadow-sm hover:border-[#EE352F] hover:text-[#EE352F] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center justify-center absolute right-0 top-1/2 -translate-y-1/2 w-9 h-20 md:w-12 md:h-24 rounded-full bg-white/95 border border-border text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <ChevronRight size={18} />
             </button>
@@ -194,7 +194,7 @@ export default function Archive() {
                           key={event.slug}
                           type="button"
                           onClick={(e) => openModal(event, e.currentTarget)}
-                          className="group text-left rounded-sm bg-[#E8E5E0] border border-[#B8B4AE] hover:border-[#787470] transition-all duration-300 overflow-hidden transform-gpu hover:scale-[1.03] hover:-translate-y-0.5 hover:shadow-md"
+                          className="group text-left rounded-sm bg-background border border-border hover:border-border transition-all duration-300 overflow-hidden transform-gpu hover:scale-[1.03] hover:-translate-y-0.5 hover:shadow-md"
                           aria-label={`${t.archive.openDetails[lang]} ${event.name}`}
                         >
                           <div className={`relative w-full ${aspect}`}>
@@ -205,15 +205,15 @@ export default function Archive() {
                               unoptimized
                               className="object-cover opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#3D3C3A]/80 via-[#3D3C3A]/10 to-transparent" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/10 to-transparent" />
                             <div className="absolute inset-0 flex flex-col justify-end p-4">
-                              <span className="inline-flex w-fit px-1.5 py-0.5 bg-[#EE352F] text-white text-[11px] font-mono font-medium rounded-sm mb-2">
+                              <span className="inline-flex w-fit px-1.5 py-0.5 bg-primary text-primary-foreground text-[11px] font-mono font-medium rounded-sm mb-2">
                                 {event.category}
                               </span>
                               <h3 className="text-white font-semibold text-sm leading-snug tracking-tight">
                                 {event.name}
                               </h3>
-                              <p className="text-[#E8E5E0] text-xs mt-1 font-mono">
+                              <p className="text-secondary text-xs mt-1 font-mono">
                                 {event.date}
                               </p>
                             </div>
@@ -225,7 +225,7 @@ export default function Archive() {
 
                   {pageEvents.length === 0 && (
                     <div className="py-16 text-center">
-                      <p className="text-[#787470] font-mono">{t.archive.noResults[lang]}</p>
+                      <p className="text-muted-foreground font-mono">{t.archive.noResults[lang]}</p>
                     </div>
                   )}
                 </div>
@@ -241,7 +241,7 @@ export default function Archive() {
                   type="button"
                   onClick={() => setCurrentPage(i)}
                   aria-label={`${t.archive.goToPage[lang]} ${i + 1}`}
-                  className={`h-px transition-all duration-200 ${i === currentPage ? 'w-10 bg-[#EE352F]' : 'w-4 bg-[#B8B4AE]'}`}
+                  className={`h-px transition-all duration-200 ${i === currentPage ? 'w-10 bg-primary' : 'w-4 bg-border'}`}
                 />
               ))}
             </div>
@@ -252,13 +252,13 @@ export default function Archive() {
         {modalEvent && modalOrigin && modalEnd && (
           <>
             <div
-              className="fixed inset-0 z-50 bg-[#3D3C3A]/40"
+              className="fixed inset-0 z-50 bg-foreground/40"
               onMouseDown={(e) => { if (e.target === e.currentTarget) closeModal() }}
               aria-hidden="true"
             />
 
             <div
-              className="fixed z-[60] bg-white border border-[#B8B4AE] shadow-xl overflow-hidden rounded-[16px] transition-[left,top,width,height,border-radius] duration-[250ms] ease-out"
+              className="fixed z-[60] bg-white border border-border shadow-xl overflow-hidden rounded-[16px] transition-[left,top,width,height,border-radius] duration-[250ms] ease-out"
               style={{
                 left: modalExpanded ? modalEnd.left : modalOrigin.left,
                 top: modalExpanded ? modalEnd.top : modalOrigin.top,
@@ -271,16 +271,16 @@ export default function Archive() {
               aria-label={`${t.archive.eventDetailsFor[lang]} ${modalEvent.name}`}
             >
               <div className="h-full flex flex-col min-h-0">
-                <div className="relative p-6 border-b border-[#B8B4AE] flex-shrink-0">
+                <div className="relative p-6 border-b border-border flex-shrink-0">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <div className="inline-flex w-fit px-2 py-1 bg-[#EE352F] text-white text-[11px] font-mono font-medium rounded-sm mb-3">
+                      <div className="inline-flex w-fit px-2 py-1 bg-primary text-primary-foreground text-[11px] font-mono font-medium rounded-sm mb-3">
                         {modalEvent.category}
                       </div>
-                      <h3 className="text-[#3D3C3A] text-xl font-bold tracking-tight leading-tight">
+                      <h3 className="text-foreground text-xl font-bold tracking-tight leading-tight">
                         {modalEvent.name}
                       </h3>
-                      <p className="text-[#787470] text-sm font-mono mt-2">
+                      <p className="text-muted-foreground text-sm font-mono mt-2">
                         {modalEvent.date} · {modalEvent.location}
                       </p>
                     </div>
@@ -289,7 +289,7 @@ export default function Archive() {
                       type="button"
                       onClick={closeModal}
                       aria-label={t.archive.closeModal[lang]}
-                      className="p-2 rounded-sm border border-[#B8B4AE] text-[#787470] bg-white hover:border-[#EE352F] hover:text-[#EE352F] transition-colors"
+                      className="p-2 rounded-sm border border-border text-muted-foreground bg-white hover:border-primary hover:text-primary transition-colors"
                     >
                       <X size={18} />
                     </button>
@@ -297,34 +297,34 @@ export default function Archive() {
                 </div>
 
                 <div className="p-6 overflow-y-auto flex-1 min-h-0">
-                  <h4 className="text-[#B8B4AE] font-mono text-xs uppercase tracking-[0.2em] mb-3">
+                  <h4 className="text-border font-mono text-xs uppercase tracking-[0.2em] mb-3">
                     {t.archive.lineupHeading[lang]}
                   </h4>
                   <ul className="flex flex-wrap gap-2 mb-6">
                     {lineupByCategory(modalEvent.category, lang).map((item) => (
                       <li
                         key={item}
-                        className="px-3 py-1 rounded-sm bg-[#E8E5E0] border border-[#B8B4AE] text-[#3D3C3A] text-sm font-mono"
+                        className="px-3 py-1 rounded-sm bg-background border border-border text-foreground text-sm font-mono"
                       >
                         {item}
                       </li>
                     ))}
                   </ul>
 
-                  <h4 className="text-[#B8B4AE] font-mono text-xs uppercase tracking-[0.2em] mb-3">
+                  <h4 className="text-border font-mono text-xs uppercase tracking-[0.2em] mb-3">
                     {t.archive.descHeading[lang]}
                   </h4>
-                  <p className="text-[#3D3C3A] leading-relaxed">{modalEvent.description}</p>
+                  <p className="text-foreground leading-relaxed">{modalEvent.description}</p>
 
                   <div className="mt-8">
-                    <h4 className="text-[#B8B4AE] font-mono text-xs uppercase tracking-[0.2em] mb-3">
+                    <h4 className="text-border font-mono text-xs uppercase tracking-[0.2em] mb-3">
                       {t.archive.galleryHeading[lang]}
                     </h4>
                     <div className="grid grid-cols-2 gap-3">
                       {getGallerySeeds(modalEvent).map((seed) => (
                         <div
                           key={seed}
-                          className="relative aspect-[4/3] rounded-sm overflow-hidden border border-[#B8B4AE]"
+                          className="relative aspect-[4/3] rounded-sm overflow-hidden border border-border"
                         >
                           <Image
                             src={`https://picsum.photos/seed/${seed}/800/600`}
@@ -339,10 +339,10 @@ export default function Archive() {
                   </div>
 
                   <div className="mt-8">
-                    <h4 className="text-[#B8B4AE] font-mono text-xs uppercase tracking-[0.2em] mb-3">
+                    <h4 className="text-border font-mono text-xs uppercase tracking-[0.2em] mb-3">
                       {t.archive.venueHeading[lang]}
                     </h4>
-                    <p className="text-[#3D3C3A] font-medium">{modalEvent.location}</p>
+                    <p className="text-foreground font-medium">{modalEvent.location}</p>
                   </div>
                 </div>
               </div>

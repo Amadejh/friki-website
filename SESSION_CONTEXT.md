@@ -1,6 +1,6 @@
 # FRIKI WEBSITE — Session Context
 *Read this before every Claude Code session. Source of truth for current build state.*
-*Last updated: Session 2 — April 3, 2026*
+*Last updated: Session 3 — April 4, 2026*
 
 ---
 
@@ -28,10 +28,10 @@ Phase 3  ⬜  Admin UI — password-protected event/gallery management (future)
 
 ## GIT WORKFLOW
 
-**Active branches:** `main` (initial snapshot), **`chore/docs-cleanup`** (current documentation pass).
+**Active branches:** `main`, **`feature/ui-palette-dimmed`** (current palette + token cleanup).
 
-**Current branch:** `chore/docs-cleanup`  
-**Last commit (before docs commit):** `chore: initial commit — working homepage with mock data`
+**Current branch:** `feature/ui-palette-dimmed`  
+**Last commit on main:** `chore: rewrite all docs to match actual codebase, fix minor code issues`
 
 **Branch naming:** `feature/ui-*`, `feature/*`, `feature/api-*`, `fix/*`, `feature/i18n-*`, `chore/*`
 
@@ -106,13 +106,21 @@ Then: `/events` index (Phase 1g), Stripe flow (1h–1i), remaining pages (1j), S
 - `next.config.mjs` — `typescript.ignoreBuildErrors: true` hides type errors from production builds (**remove when types are clean**).
 - `images.unoptimized: true` — revisit when using optimised remote images (e.g. Supabase).
 - `experimental.optimizePackageImports: ['lucide-react']` — keep.
-- **Hardcoded hex in TSX** — many components use `text-[#EE352F]` etc. instead of semantic tokens; **tech debt** (do not refactor in unrelated PRs).
+- **Hardcoded hex in TSX** — ~~tech debt~~ **resolved** in Session 3. All components now use semantic tokens. Do not introduce new `[#hex]` values.
 - **`@custom-variant dark`** in CSS — shadcn compatibility; app does not enable dark mode.
 - No `output: 'export'` — full Next/Vercel deployment assumed.
 
 ---
 
 ## SESSION LOG
+
+### Session 3 — April 4, 2026 — Palette shift + token cleanup (`feature/ui-palette-dimmed`)
+
+- `app/globals.css`: `--background` shifted from `var(--white)` → `var(--light-grey)` (#E8E5E0 is now page bg); `--card/popover/secondary/muted/input` → `#D4D1CC`; added `--color-deep-red-dark: #C42A26` token.
+- All 6 components (`navbar`, `hero`, `footer`, `events-carousel`, `archive`, `event-detail-view`) converted from hardcoded hex to semantic Tailwind tokens.
+- Intentional `bg-white` carve-outs preserved: navbar pill container, lang toggle, mobile drawer, carousel/archive nav buttons, event cards, archive modal, detail sidebar icon squares.
+- `agent_docs/design-system.md` updated: new palette table, token aliases, carve-out list, hardcoded hex tech debt resolved.
+- Lesson: gradient `from-white` bleeds must be updated whenever `--background` changes — changed to `from-background`.
 
 ### Session 2 — April 3, 2026 — Documentation & cleanup (`chore/docs-cleanup`)
 

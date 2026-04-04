@@ -13,24 +13,24 @@
   --deep-red:    #EE352F;
 
   /* Design tokens */
-  --background:             var(--white);
+  --background:             var(--light-grey);
   --foreground:             var(--charcoal);
-  --card:                   var(--light-grey);
+  --card:                   #D4D1CC;
   --card-foreground:        var(--charcoal);
-  --popover:                var(--white);
+  --popover:                #D4D1CC;
   --popover-foreground:     var(--charcoal);
   --primary:                var(--deep-red);
   --primary-foreground:     var(--white);
-  --secondary:              var(--light-grey);
+  --secondary:              #D4D1CC;
   --secondary-foreground:   var(--charcoal);
-  --muted:                  var(--light-grey);
+  --muted:                  #D4D1CC;
   --muted-foreground:       var(--ash-grey);
   --accent:                 var(--deep-red);
   --accent-foreground:      var(--white);
   --destructive:            var(--deep-red);
   --destructive-foreground: var(--white);
   --border:                 var(--mid-grey);
-  --input:                  var(--light-grey);
+  --input:                  #D4D1CC;
   --ring:                   var(--deep-red);
   --radius:                 0.375rem;
 }
@@ -69,7 +69,8 @@
   --color-mid-grey:    #B8B4AE;
   --color-ash-grey:    #787470;
   --color-charcoal:    #3D3C3A;
-  --color-deep-red:    #EE352F;
+  --color-deep-red:      #EE352F;
+  --color-deep-red-dark: #C42A26;
 }
 
 @layer base {

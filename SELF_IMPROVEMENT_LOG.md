@@ -69,13 +69,25 @@ When URL-based locales are added, follow next-intl App Router patterns (`setRequ
 
 ## LESSON 2: Hardcoded hex values defeat design tokens
 
-**Date:** April 3, 2026
+**Date:** April 3, 2026 → **Resolved:** April 4, 2026
 
 **Problem:** `app/globals.css` defines a full token system, but many components use literals such as `text-[#EE352F]` instead of `text-primary` or `text-[var(--deep-red)]`, so palette updates require wide search-and-replace.
 
-**What worked:** Recording this as tech debt and planning a dedicated token pass instead of mixing refactors into feature work.
+**What worked:** A dedicated token-cleanup pass in Session 3 replaced all `[#hex]` values in all 6 components. Confirmed zero remaining `[#` sequences via grep.
 
-**Rule for next time:** In new components, prefer semantic Tailwind classes or `var(--token)`. Avoid raw hex in TSX unless there is a strong one-off reason.
+**Rule for next time:** In new components, use only semantic Tailwind classes from the token table in `agent_docs/design-system.md`. Never use `[#hex]` literals.
+
+---
+
+## LESSON 3: Gradient `from-*` colors must match the page background token
+
+**Date:** April 4, 2026
+
+**Problem:** When `--background` was shifted from `var(--white)` to `var(--light-grey)`, the hero and event detail gradients (`bg-gradient-to-t from-white`) no longer blended into the page — creating a jarring white-to-warm-grey seam.
+
+**What worked:** Changing `from-white` to `from-background` so the gradient always tracks the current background token.
+
+**Rule for next time:** Any gradient that bleeds an image into the page background must use `from-background` (or whatever the page token is), NOT `from-white`. If you change `--background`, grep for `from-white` in components and update them.
 
 ---
 
