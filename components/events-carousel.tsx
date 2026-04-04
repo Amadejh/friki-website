@@ -36,28 +36,30 @@ export default function EventsCarousel() {
               {t.carousel.heading[lang]}
             </h2>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={prev}
-              disabled={currentIndex === 0}
-              className="w-9 h-9 rounded border border-[#B8B4AE] flex items-center justify-center text-[#787470] hover:border-[#787470] hover:text-[#3D3C3A] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 bg-white"
-              aria-label={t.carousel.prevEvents[lang]}
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <button
-              onClick={next}
-              disabled={currentIndex >= maxIndex}
-              className="w-9 h-9 rounded border border-[#B8B4AE] flex items-center justify-center text-[#787470] hover:border-[#787470] hover:text-[#3D3C3A] disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 bg-white"
-              aria-label={t.carousel.nextEvents[lang]}
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
         </div>
 
         {/* Carousel track */}
-        <div className="overflow-hidden" ref={trackRef}>
+        <div className="relative">
+          <button
+            type="button"
+            onClick={prev}
+            disabled={currentIndex === 0}
+            aria-label={t.carousel.prevEvents[lang]}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-[#B8B4AE] bg-white/95 text-[#787470] shadow-sm hover:border-[#EE352F] hover:text-[#EE352F] transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <button
+            type="button"
+            onClick={next}
+            disabled={currentIndex >= maxIndex}
+            aria-label={t.carousel.nextEvents[lang]}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-[#B8B4AE] bg-white/95 text-[#787470] shadow-sm hover:border-[#EE352F] hover:text-[#EE352F] transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+          >
+            <ChevronRight size={18} />
+          </button>
+
+          <div className="overflow-hidden" ref={trackRef}>
           <div
             className="flex gap-4 transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(calc(-${currentIndex} * (100% / 3 + 5.5px)))` }}
@@ -112,6 +114,7 @@ export default function EventsCarousel() {
                 </div>
               </Link>
             ))}
+          </div>
           </div>
         </div>
 

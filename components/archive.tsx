@@ -156,7 +156,7 @@ export default function Archive() {
               onClick={() => setCurrentPage((p) => Math.max(0, p - 1))}
               disabled={currentPage === 0}
               aria-label={t.archive.prevPage[lang]}
-              className="flex items-center justify-center absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-sm bg-white border border-[#B8B4AE] text-[#787470] shadow-sm hover:border-[#EE352F] hover:text-[#EE352F] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center justify-center absolute left-0 top-1/2 -translate-y-1/2 w-9 h-20 md:w-12 md:h-24 rounded-full bg-white/95 border border-[#B8B4AE] text-[#787470] shadow-sm hover:border-[#EE352F] hover:text-[#EE352F] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <ChevronLeft size={18} />
             </button>
@@ -168,7 +168,7 @@ export default function Archive() {
               onClick={() => setCurrentPage((p) => Math.min(slides.length - 1, p + 1))}
               disabled={currentPage >= slides.length - 1}
               aria-label={t.archive.nextPage[lang]}
-              className="flex items-center justify-center absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-sm bg-white border border-[#B8B4AE] text-[#787470] shadow-sm hover:border-[#EE352F] hover:text-[#EE352F] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center justify-center absolute right-0 top-1/2 -translate-y-1/2 w-9 h-20 md:w-12 md:h-24 rounded-full bg-white/95 border border-[#B8B4AE] text-[#787470] shadow-sm hover:border-[#EE352F] hover:text-[#EE352F] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <ChevronRight size={18} />
             </button>

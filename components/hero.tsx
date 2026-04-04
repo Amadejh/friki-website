@@ -27,7 +27,7 @@ export default function Hero() {
           {/* Drop friki-logo.png into public/ to replace this text logo */}
           <span className="text-[#3D3C3A] text-4xl md:text-5xl font-bold tracking-tight font-mono">FRIKI</span>
           <p className="text-[#EE352F] text-xs font-semibold uppercase tracking-[0.2em] mt-3 font-mono">
-            Študentsko društvo FRI · Ljubljana, Slovenija
+            Študentski svet FRI · Ljubljana, Slovenija
           </p>
         </div>
       </div>

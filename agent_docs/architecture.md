@@ -1,187 +1,82 @@
 # Architecture
-*Read this when: creating new pages, new components, new API routes, or restructuring the app.*
+*Read this when: adding routes, components, data fetching, or API boundaries.*
 
 ---
 
-## Directory Structure
+## What exists today
+
+### Routes (`app/`)
+
+| Route | File | Notes |
+|---|---|---|
+| `/` | `app/page.tsx` | Homepage: Navbar, Hero, EventsCarousel, Archive, Footer |
+| `/events/[slug]` | `app/events/[slug]/page.tsx` | Event detail; static params from `lib/data.ts` (`generateStaticParams`) |
+| 404 | `app/not-found.tsx` | Global not-found UI |
+
+There is **no** `/events` list page, **no** `app/api/*`, **no** `/merch`, `/past-events`, or `/tickets/success` yet.
+
+### Root layout
+
+- `app/layout.tsx` — IBM Plex fonts (CSS variables on `<html>`), `LanguageProvider`, Vercel Analytics, imports `app/globals.css`.
+
+### Custom components (`components/`)
+
+| File | Role |
+|---|---|
+| `navbar.tsx` | Fixed nav, mobile drawer, SL/EN toggle, section highlighting on `/` |
+| `hero.tsx` | Team photo banner + about strip (copy from `lib/translations.ts`) |
+| `events-carousel.tsx` | Upcoming events strip (mock data from `lib/data.ts`) |
+| `archive.tsx` | Past-events grid, search, pagination, FLIP-style lightbox modal |
+| `footer.tsx` | Links, socials, contact |
+| `event-detail-view.tsx` | Event page layout (hero image, sidebar, breadcrumbs) |
+| `theme-provider.tsx` | Wraps `next-themes` — **not used** in `layout.tsx` |
+
+**`components/ui/`** — full shadcn/ui set (new-york). **No custom page imports these yet**; they are installed for future forms, dialogs, etc.
+
+### Libraries (`lib/`)
+
+| File | Role |
+|---|---|
+| `data.ts` | `Event` type, mock `upcomingEvents`, `archiveEvents`, `allEvents` |
+| `language-context.tsx` | `LanguageProvider`, `useLang()` — default `SL`, persists `friki-lang` in `localStorage` |
+| `translations.ts` | Slovenian/English strings for UI |
+| `utils.ts` | `cn()` (clsx + tailwind-merge) |
+
+No `config*`, Supabase, Stripe, or Resend clients yet.
+
+### Data flow (current)
 
 ```
-website/
-├── app/
-│   ├── layout.tsx                  ← Root layout: fonts, metadata, Analytics
-│   ├── page.tsx                    ← Homepage (/)
-│   ├── globals.css                 ← Global styles, CSS variables, Tailwind import
-│   ├── events/
-│   │   ├── page.tsx                ← Events list (/events)
-│   │   └── [id]/
-│   │       └── page.tsx            ← Event detail (/events/[id])
-│   ├── past-events/
-│   │   └── page.tsx                ← Past events gallery (/past-events)
-│   ├── merch/
-│   │   └── page.tsx                ← Merch store shell (/merch)
-│   ├── tickets/
-│   │   └── success/
-│   │       └── page.tsx            ← Post-purchase success (/tickets/success)
-│   ├── api/
-│   │   ├── cors.ts                 ← Shared CORS headers helper
-│   │   ├── events/route.ts         ← GET /api/events
-│   │   ├── checkout/route.ts       ← POST /api/checkout
-│   │   ├── webhook/route.ts        ← POST /api/webhook (Stripe)
-│   │   ├── tickets/
-│   │   │   └── [sessionId]/route.ts ← GET /api/tickets/[sessionId]
-│   │   └── gallery/route.ts        ← GET /api/gallery
-│   └── [locale]/                   ← Phase 2 only: bilingual routing
-│       └── layout.tsx
-├── components/
-│   ├── ui/                         ← shadcn/ui generated components — DO NOT EDIT
-│   ├── navbar.tsx                  ← Site navigation
-│   ├── footer.tsx                  ← Site footer
-│   ├── hero.tsx                    ← Homepage hero section
-│   ├── events-carousel.tsx         ← Homepage events preview
-│   ├── archive.tsx                 ← Homepage past events teaser
-│   ├── event-card.tsx              ← Reusable event card component
-│   ├── event-detail-content.tsx    ← Client component for event detail + ticket modal
-│   ├── ticket-modal.tsx            ← Buy ticket form (name + email → Stripe checkout)
-│   ├── nav-link.tsx                ← Active-state nav link
-│   ├── language-switcher.tsx       ← SL/EN toggle (Phase 2)
-│   ├── stat-card.tsx               ← Animated counter card
-│   ├── section-divider.tsx         ← SVG curve divider between sections
-│   ├── hero-spotlight.tsx          ← Cursor-following radial gradient
-│   ├── marquee-ticker.tsx          ← Infinite scrolling ticker
-│   ├── scroll-progress.tsx         ← Fixed red progress bar on scroll
-│   └── theme-provider.tsx          ← next-themes provider (dark-only)
-├── lib/
-│   ├── config.ts                   ← Public env vars only (NEXT_PUBLIC_*)
-│   ├── config.server.ts            ← Server secrets — API routes ONLY
-│   ├── supabase-client.ts          ← Anon client — safe for server components + browser
-│   ├── supabase-server.ts          ← Service role client — API routes ONLY
-│   ├── stripe.ts                   ← Stripe client — API routes ONLY
-│   ├── resend.ts                   ← Resend client — API routes ONLY
-│   ├── email.ts                    ← sendTicketConfirmation() — API routes ONLY
-│   └── utils.ts                    ← shadcn cn() utility (already exists)
-├── types/
-│   ├── database.ts                 ← Supabase auto-generated types
-│   └── api.ts                      ← Request/response types for API routes
-├── supabase/
-│   └── schema.sql                  ← Run in Supabase SQL Editor on project creation
-├── public/
-│   └── friki-logo.png              ← FRIKi logo (white on transparent, PNG)
-├── hooks/                          ← Custom React hooks (shadcn put some here)
-├── agent_docs/                     ← Context files for Claude Code
-├── .claude/                        ← Claude Code configuration
-└── [config files]
+lib/data.ts (mock arrays)
+  → imported directly into client components / pages
+  → no fetch(), no API routes, no database
 ```
+
+### Internationalisation (current)
+
+- **Not** next-intl.
+- SL/EN switching: React Context + `localStorage` only. No locale segment in the URL.
 
 ---
 
-## Routing Patterns
+## Planned (not built)
 
-### Static pages (no data)
-Use Server Components. No `'use client'` needed.
-```typescript
-// app/merch/page.tsx
-export default function MerchPage() {
-  return <main>...</main>
-}
-```
-
-### Pages with async data (Supabase)
-Use Server Components with `async`. Data fetches happen server-side.
-```typescript
-// app/events/page.tsx
-import { createClient } from '@/lib/supabase-client'
-
-export default async function EventsPage() {
-  const supabase = createClient()
-  const { data: events } = await supabase.from('events').select('*').eq('is_published', true)
-  return <main><EventList events={events ?? []} /></main>
-}
-```
-
-### Pages with user interaction (forms, modals, state)
-Split into Server Component wrapper + Client Component child:
-```typescript
-// app/events/[id]/page.tsx — Server Component (fetches data)
-export default async function EventDetailPage({ params }) {
-  const event = await fetchEvent(params.id)
-  return <EventDetailContent event={event} />  // passes data to client
-}
-
-// components/event-detail-content.tsx — Client Component
-'use client'
-export function EventDetailContent({ event }) {
-  const [modalOpen, setModalOpen] = useState(false)
-  // ... interactive UI
-}
-```
-
-### API routes
-All in `app/api/`. Use `runtime = 'nodejs'` for routes that need full Node.js (Stripe webhook). Use the shared CORS helper.
-```typescript
-// app/api/events/route.ts
-import { corsHeaders } from '@/app/api/cors'
-
-export async function GET() {
-  // ... fetch and return data
-  return Response.json(data, { headers: corsHeaders })
-}
-```
+- Supabase schema + clients; Stripe Checkout + webhook; Resend emails; `app/api/*` routes.
+- `/events` index page; merch / past-events / ticket success pages as needed.
+- **Phase 2:** next-intl with URL-based locales (replace context-only toggle).
+- **Phase 3:** optional admin UI.
 
 ---
 
-## Component Naming Conventions
+## Conventions
 
-- **Files:** kebab-case (`event-card.tsx`, `nav-link.tsx`)
-- **Components:** PascalCase matching filename (`EventCard`, `NavLink`)
-- **Client components:** add `'use client'` as the first line when using hooks
-- **Colocate:** if a component is only used in one page, it can live in that page's directory. Shared components go in `components/`.
-
----
-
-## Data Flow
-
-```
-Supabase database
-  → lib/supabase-client.ts (anon, public read)
-  → Server Component (async data fetch)
-  → Props passed to Client Components
-  → User interaction
-  → POST to API route
-  → lib/supabase-server.ts (service role, writes)
-  → Supabase database updated
-```
-
-**Rule:** Data reads from Supabase happen in Server Components (free, fast, no waterfall).
-**Rule:** Data writes always go through API routes (to use the service role safely).
+- **New routes:** add under `app/` using App Router file conventions.
+- **Client vs server:** interactive sections use `'use client'`; keep server components default where possible for new pages.
+- **Secrets:** future `lib/*.server.ts` and `app/api/*` only — never import from client components.
 
 ---
 
-## Key Config Files
+## Config worth knowing
 
-### next.config.mjs
-- `typescript.ignoreBuildErrors: true` — **Remove this** once all types are correct (it hides real errors)
-- `images.unoptimized: true` — keep until Supabase Storage is set up
-- `experimental.optimizePackageImports: ['lucide-react']` — keep, reduces bundle size
-
-### components.json (shadcn)
-- Do not modify `aliases` — they match `tsconfig.json` path mappings (`@/components`, `@/lib`, etc.)
-- `style: 'new-york'` — all new shadcn components should use this style
-
-### tsconfig.json
-Path mappings are configured for `@/` → root. When adding new top-level directories, add them here if you want `@/newdir/*` imports.
-
----
-
-## Phase 2: Bilingual Routing (next-intl)
-
-When Phase 2 starts, the routing changes from `/page` to `/[locale]/page`:
-```
-/             → /sl/         (Slovenian, redirected from root)
-/en/          → /en/         (English)
-/events       → /sl/events
-/en/events    → /en/events
-```
-
-All pages move from `app/` to `app/[locale]/`. Layout changes to accept locale param.
-API routes stay at `app/api/` — they are locale-independent.
-**Do not start Phase 2 until Phase 1 is complete and tested.**
+- `next.config.mjs` — `typescript.ignoreBuildErrors: true` (tech debt), `images.unoptimized: true`, `optimizePackageImports: ['lucide-react']`.
+- `tsconfig.json` — `@/*` path alias to project root.
