@@ -7,26 +7,24 @@ import { archiveEvents } from '@/lib/data'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useLang } from '@/lib/language-context'
 import { t, lineupByCategory } from '@/lib/translations'
+import { cn } from '@/lib/utils'
 
 const eventsPerPage = 9
 const animationDurationMs = 250
 
 type Rect = { left: number; top: number; width: number; height: number }
 
-function hashString(input: string) {
-  let hash = 0
-  for (let i = 0; i < input.length; i += 1) {
-    hash = (hash << 5) - hash + input.charCodeAt(i)
-    hash |= 0
-  }
-  return Math.abs(hash)
-}
-
-function getCardAspectClass(event: Event) {
-  const variants = ['aspect-square', 'aspect-[4/5]', 'aspect-[3/4]', 'aspect-[16/7]'] as const
-  const idx = hashString(event.slug) % variants.length
-  return variants[idx]
-}
+const BENTO_LAYOUT = [
+  { colSpan: 'col-span-2', rowSpan: 'row-span-1' }, // 0: wide  — top-left
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 1: small — top-right
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 2: small
+  { colSpan: 'col-span-1', rowSpan: 'row-span-2' }, // 3: tall  — center column
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 4: small
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 5: small
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 6: small
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 7: small
+  { colSpan: 'col-span-2', rowSpan: 'row-span-1' }, // 8: wide  — bottom-right
+] as const
 
 function getGallerySeeds(event: Event) {
   return [0, 1, 2, 3].map((i) => event.posterSeed + i * 13)
@@ -144,7 +142,7 @@ export default function Archive() {
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t.archive.searchPlaceholder[lang]}
             aria-label={t.archive.searchLabel[lang]}
-            className="w-full px-4 py-3 rounded-sm bg-background border border-border text-foreground placeholder:text-border outline-none focus:border-primary transition-colors"
+            className="w-full px-5 py-3 rounded-full bg-background border border-border text-foreground placeholder:text-border outline-none focus:border-primary transition-colors"
           />
         </div>
 
@@ -182,41 +180,44 @@ export default function Archive() {
               {slides.map((pageEvents, pageIdx) => (
                 <div key={`${pageIdx}`} className="min-w-full">
                   <div
-                    className={`grid grid-cols-3 gap-3 ${
+                    className={`grid grid-cols-3 auto-rows-[200px] gap-3 ${
                       modalEvent ? 'filter blur-[2px] brightness-90 transition-[filter] duration-200' : ''
                     }`}
                     aria-label={`${t.archive.pageLabel[lang]} ${pageIdx + 1}`}
                   >
-                    {pageEvents.map((event) => {
-                      const aspect = getCardAspectClass(event)
+                    {pageEvents.map((event, idx) => {
+                      const layout = BENTO_LAYOUT[idx] ?? { colSpan: 'col-span-1', rowSpan: 'row-span-1' }
                       return (
                         <button
                           key={event.slug}
                           type="button"
                           onClick={(e) => openModal(event, e.currentTarget)}
-                          className="group text-left rounded-sm bg-background border border-border hover:border-border transition-all duration-300 overflow-hidden transform-gpu hover:scale-[1.03] hover:-translate-y-0.5 hover:shadow-md"
+                          className={cn(
+                            'group relative text-left rounded-sm overflow-hidden border border-border',
+                            'hover:shadow-lg transition-all duration-300',
+                            layout.colSpan,
+                            layout.rowSpan
+                          )}
                           aria-label={`${t.archive.openDetails[lang]} ${event.name}`}
                         >
-                          <div className={`relative w-full ${aspect}`}>
-                            <Image
-                              src={`https://picsum.photos/seed/${event.posterSeed}/900/700`}
-                              alt={event.name}
-                              fill
-                              unoptimized
-                              className="object-cover group-hover:scale-105 transition-all duration-500"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/10 to-transparent" />
-                            <div className="absolute inset-0 flex flex-col justify-end p-4">
-                              <span className="inline-flex w-fit px-1.5 py-0.5 bg-primary text-primary-foreground text-[11px] font-mono font-medium rounded-sm mb-2">
-                                {event.category}
-                              </span>
-                              <h3 className="text-white font-semibold text-sm leading-snug tracking-tight">
-                                {event.name}
-                              </h3>
-                              <p className="text-secondary text-xs mt-1 font-mono">
-                                {event.date}
-                              </p>
-                            </div>
+                          <Image
+                            src={`https://picsum.photos/seed/${event.posterSeed}/900/700`}
+                            alt={event.name}
+                            fill
+                            unoptimized
+                            className="object-cover group-hover:scale-105 transition-all duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/10 to-transparent" />
+                          <div className="absolute inset-0 flex flex-col justify-end p-4">
+                            <span className="inline-flex w-fit px-1.5 py-0.5 bg-primary text-primary-foreground text-[11px] font-mono font-medium rounded-sm mb-2">
+                              {event.category}
+                            </span>
+                            <h3 className="text-white font-semibold text-sm leading-snug tracking-tight">
+                              {event.name}
+                            </h3>
+                            <p className="text-secondary text-xs mt-1 font-mono">
+                              {event.date}
+                            </p>
                           </div>
                         </button>
                       )
