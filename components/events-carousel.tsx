@@ -22,7 +22,7 @@ export default function EventsCarousel() {
   return (
     <section
       id="events"
-      className="w-full bg-background border-t border-border py-16 md:py-24 overflow-hidden"
+      className="w-full bg-card border-t border-border py-16 md:py-24 overflow-hidden"
       aria-label={t.carousel.heading[lang]}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">

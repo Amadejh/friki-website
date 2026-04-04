@@ -39,7 +39,7 @@ export default function Footer() {
   return (
     <footer
       id="contact"
-      className="w-full bg-background border-t border-border pb-28 md:pb-36"
+      className="w-full bg-card border-t border-border pb-28 md:pb-36"
       aria-label="Site footer"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12 md:py-16">
