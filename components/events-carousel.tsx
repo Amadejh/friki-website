@@ -68,7 +68,7 @@ export default function EventsCarousel() {
               <Link
                 key={event.slug}
                 href={`/events/${event.slug}`}
-                className="group flex-shrink-0 w-full md:w-[calc(33.333%-11px)] bg-white border border-border rounded-md overflow-hidden hover:border-border hover:shadow-md transition-all duration-200 flex flex-col"
+                className="group flex-shrink-0 w-full md:w-[calc(33.333%-11px)] bg-white border border-border rounded-xl overflow-hidden hover:border-border hover:shadow-md transition-all duration-200 flex flex-col"
                 aria-label={`${t.carousel.viewDetails[lang]} ${event.name}`}
               >
                 {/* Poster */}
@@ -81,7 +81,7 @@ export default function EventsCarousel() {
                       unoptimized
                       className="object-cover group-hover:scale-105 transition-all duration-500"
                     />
-                    <span className="absolute top-3 left-3 px-2 py-0.5 bg-primary text-primary-foreground text-xs font-mono font-medium rounded-sm">
+                    <span className="absolute top-3 left-3 px-2 py-0.5 bg-primary text-primary-foreground text-xs font-mono font-medium rounded-md">
                       {event.category}
                     </span>
                   </div>
@@ -108,7 +108,7 @@ export default function EventsCarousel() {
                     {event.teaser}
                   </p>
 
-                  <span className="inline-flex items-center justify-center w-full mt-auto px-4 py-2 rounded-sm bg-primary text-primary-foreground text-xs font-semibold uppercase tracking-widest hover:bg-deep-red-dark transition-colors duration-150">
+                  <span className="inline-flex items-center justify-center w-full mt-auto px-4 py-2 rounded-md bg-primary text-primary-foreground text-xs font-semibold uppercase tracking-widest hover:bg-deep-red-dark transition-colors duration-150">
                     {t.carousel.viewEvent[lang]}
                   </span>
                 </div>

@@ -41,7 +41,7 @@ export function View({ event }: EventDetailProps) {
         <div className="absolute top-24 left-0 right-0 px-6 lg:px-8 max-w-7xl mx-auto w-full">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground text-xs font-mono font-medium transition-colors group bg-background/80 backdrop-blur-sm px-3 py-1.5 rounded-sm border border-border"
+            className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground text-xs font-mono font-medium transition-colors group bg-background/80 backdrop-blur-sm px-3 py-1.5 rounded-md border border-border"
           >
             <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
             {t.detail.backToHome[lang]}
@@ -49,7 +49,7 @@ export function View({ event }: EventDetailProps) {
         </div>
 
         <div className="absolute bottom-6 left-6 lg:left-8">
-          <span className="px-2 py-0.5 bg-primary text-primary-foreground text-xs font-mono font-medium rounded-sm">
+          <span className="px-2 py-0.5 bg-primary text-primary-foreground text-xs font-mono font-medium rounded-md">
             {event.category}
           </span>
         </div>
@@ -82,14 +82,14 @@ export function View({ event }: EventDetailProps) {
 
           {/* Sidebar — event details */}
           <aside className="lg:col-span-1">
-            <div className="bg-card border border-border rounded-sm p-6 sticky top-24">
+            <div className="bg-card border border-border rounded-xl p-6 sticky top-24">
               <h2 className="text-border font-mono text-xs uppercase tracking-[0.2em] mb-6">
                 {t.detail.eventDetails[lang]}
               </h2>
               <ul className="flex flex-col gap-5">
                 {infoItems.map(({ label, value, Icon }) => (
                   <li key={label} className="flex items-start gap-3">
-                    <span className="w-7 h-7 flex-shrink-0 border border-border bg-white flex items-center justify-center rounded-sm">
+                    <span className="w-7 h-7 flex-shrink-0 border border-border bg-white flex items-center justify-center rounded-md">
                       <Icon size={13} className="text-primary" />
                     </span>
                     <div>
@@ -105,7 +105,7 @@ export function View({ event }: EventDetailProps) {
               <div className="mt-8 pt-6 border-t border-border">
                 <Link
                   href="/#contact"
-                  className="w-full flex items-center justify-center px-5 py-2.5 rounded-sm bg-primary text-primary-foreground text-xs font-semibold uppercase tracking-widest hover:bg-deep-red-dark transition-colors duration-150"
+                  className="w-full flex items-center justify-center px-5 py-2.5 rounded-md bg-primary text-primary-foreground text-xs font-semibold uppercase tracking-widest hover:bg-deep-red-dark transition-colors duration-150"
                 >
                   {t.detail.getInTouch[lang]}
                 </Link>

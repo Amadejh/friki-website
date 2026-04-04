@@ -193,7 +193,7 @@ export default function Archive() {
                           type="button"
                           onClick={(e) => openModal(event, e.currentTarget)}
                           className={cn(
-                            'group relative text-left rounded-sm overflow-hidden border border-border',
+                            'group relative text-left rounded-xl overflow-hidden border border-border',
                             'hover:shadow-lg transition-all duration-300',
                             layout.colSpan,
                             layout.rowSpan
@@ -209,7 +209,7 @@ export default function Archive() {
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/10 to-transparent" />
                           <div className="absolute inset-0 flex flex-col justify-end p-4">
-                            <span className="inline-flex w-fit px-1.5 py-0.5 bg-primary text-primary-foreground text-[11px] font-mono font-medium rounded-sm mb-2">
+                            <span className="inline-flex w-fit px-1.5 py-0.5 bg-primary text-primary-foreground text-[11px] font-mono font-medium rounded-md mb-2">
                               {event.category}
                             </span>
                             <h3 className="text-white font-semibold text-sm leading-snug tracking-tight">
@@ -275,7 +275,7 @@ export default function Archive() {
                 <div className="relative p-6 border-b border-border flex-shrink-0">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <div className="inline-flex w-fit px-2 py-1 bg-primary text-primary-foreground text-[11px] font-mono font-medium rounded-sm mb-3">
+                      <div className="inline-flex w-fit px-2 py-1 bg-primary text-primary-foreground text-[11px] font-mono font-medium rounded-md mb-3">
                         {modalEvent.category}
                       </div>
                       <h3 className="text-foreground text-xl font-bold tracking-tight leading-tight">
@@ -290,7 +290,7 @@ export default function Archive() {
                       type="button"
                       onClick={closeModal}
                       aria-label={t.archive.closeModal[lang]}
-                      className="p-2 rounded-sm border border-border text-muted-foreground bg-white hover:border-primary hover:text-primary transition-colors"
+                      className="p-2 rounded-md border border-border text-muted-foreground bg-white hover:border-primary hover:text-primary transition-colors"
                     >
                       <X size={18} />
                     </button>
@@ -305,7 +305,7 @@ export default function Archive() {
                     {lineupByCategory(modalEvent.category, lang).map((item) => (
                       <li
                         key={item}
-                        className="px-3 py-1 rounded-sm bg-background border border-border text-foreground text-sm font-mono"
+                        className="px-3 py-1 rounded-md bg-background border border-border text-foreground text-sm font-mono"
                       >
                         {item}
                       </li>
@@ -325,7 +325,7 @@ export default function Archive() {
                       {getGallerySeeds(modalEvent).map((seed) => (
                         <div
                           key={seed}
-                          className="relative aspect-[4/3] rounded-sm overflow-hidden border border-border"
+                          className="relative aspect-[4/3] rounded-md overflow-hidden border border-border"
                         >
                           <Image
                             src={`https://picsum.photos/seed/${seed}/800/600`}

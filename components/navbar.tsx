@@ -170,14 +170,14 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-center h-14 lg:h-16 relative">
 
           {/* Center nav pills — desktop */}
-          <div className="hidden md:flex pointer-events-auto items-center gap-0.5 bg-white border border-border rounded-sm px-1.5 py-1.5 shadow-sm">
+          <div className="hidden md:flex pointer-events-auto items-center gap-0.5 bg-white border border-border rounded-lg px-1.5 py-1.5 shadow-sm">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.sectionId ? `/#${link.sectionId}` : '/'}
                 onClick={(e) => handleNavClick(e, link)}
                 className={cn(
-                  'px-4 py-1 rounded-sm text-xs font-semibold uppercase tracking-widest transition-all duration-150',
+                  'px-4 py-1 rounded-md text-xs font-semibold uppercase tracking-widest transition-all duration-150',
                   isActive(link)
                     ? 'bg-primary text-primary-foreground'
                     : 'text-muted-foreground hover:text-foreground hover:bg-card'
@@ -191,7 +191,7 @@ export default function Navbar() {
           {/* Right: lang toggle + hamburger */}
           <div className="absolute right-6 lg:right-8 flex items-center gap-2 pointer-events-auto">
             {/* Language toggle — desktop */}
-            <div className="hidden md:flex items-center gap-0.5 bg-white border border-border rounded-sm p-1 shadow-sm">
+            <div className="hidden md:flex items-center gap-0.5 bg-white border border-border rounded-lg p-1 shadow-sm">
               {(['SL', 'EN'] as const).map((l) => (
                 <button
                   key={l}
@@ -199,7 +199,7 @@ export default function Navbar() {
                     setLang(l)
                   }}
                   className={cn(
-                    'px-3 py-1 rounded-sm text-xs font-mono font-semibold transition-all duration-150',
+                    'px-3 py-1 rounded-md text-xs font-mono font-semibold transition-all duration-150',
                     lang === l
                       ? 'bg-primary text-primary-foreground'
                       : 'text-muted-foreground hover:text-foreground'
@@ -214,7 +214,7 @@ export default function Navbar() {
 
             {/* Hamburger */}
             <button
-              className="md:hidden p-2 rounded-sm bg-white border border-border text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-all duration-150"
+              className="md:hidden p-2 rounded-md bg-white border border-border text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-all duration-150"
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
             >
@@ -237,7 +237,7 @@ export default function Navbar() {
       {/* Mobile drawer */}
       <aside
         className={cn(
-          'fixed top-0 right-0 bottom-0 z-50 w-64 bg-white border-l border-border flex flex-col transition-transform duration-200 ease-in-out md:hidden',
+          'fixed top-0 right-0 bottom-0 z-50 w-64 bg-white border-l border-border rounded-l-xl flex flex-col transition-transform duration-200 ease-in-out md:hidden',
           mobileOpen ? 'translate-x-0' : 'translate-x-full'
         )}
         aria-label="Mobile navigation"
@@ -245,7 +245,7 @@ export default function Navbar() {
         <div className="flex items-center justify-end px-5 h-14 border-b border-border">
           <button
             onClick={() => setMobileOpen(false)}
-            className="p-1.5 rounded-sm text-muted-foreground hover:text-foreground hover:bg-card transition-colors"
+            className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-card transition-colors"
             aria-label="Close menu"
           >
             <X size={16} />
@@ -259,7 +259,7 @@ export default function Navbar() {
               href={link.sectionId ? `/#${link.sectionId}` : '/'}
               onClick={(e) => handleNavClick(e, link)}
               className={cn(
-                'px-4 py-2.5 rounded-sm text-xs font-semibold uppercase tracking-widest transition-colors duration-150',
+                'px-4 py-2.5 rounded-md text-xs font-semibold uppercase tracking-widest transition-colors duration-150',
                 isActive(link)
                   ? 'bg-primary text-primary-foreground'
                   : 'text-muted-foreground hover:text-foreground hover:bg-card'
@@ -281,7 +281,7 @@ export default function Navbar() {
                   setLang(l)
                 }}
                 className={cn(
-                  'flex-1 py-2 rounded-sm text-xs font-mono font-semibold transition-all',
+                  'flex-1 py-2 rounded-md text-xs font-mono font-semibold transition-all',
                   lang === l
                     ? 'bg-primary text-primary-foreground'
                     : 'bg-card text-muted-foreground hover:text-foreground'
