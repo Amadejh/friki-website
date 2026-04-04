@@ -180,9 +180,7 @@ export default function Archive() {
               {slides.map((pageEvents, pageIdx) => (
                 <div key={`${pageIdx}`} className="min-w-full">
                   <div
-                    className={`grid grid-cols-3 auto-rows-[200px] gap-3 ${
-                      modalEvent ? 'filter blur-[2px] brightness-90 transition-[filter] duration-200' : ''
-                    }`}
+                    className="grid grid-cols-3 auto-rows-[200px] gap-3"
                     aria-label={`${t.archive.pageLabel[lang]} ${pageIdx + 1}`}
                   >
                     {pageEvents.map((event, idx) => {
@@ -253,7 +251,7 @@ export default function Archive() {
         {modalEvent && modalOrigin && modalEnd && (
           <>
             <div
-              className="fixed inset-0 z-50 bg-foreground/40"
+              className="fixed inset-0 z-50 bg-foreground/40 backdrop-blur-sm"
               onMouseDown={(e) => { if (e.target === e.currentTarget) closeModal() }}
               aria-hidden="true"
             />
