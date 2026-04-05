@@ -116,7 +116,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-border text-sm font-mono">
-            &copy; 2025–2026 Friki &ndash; Študentski svet FRI
+            &copy; 2025–2026 Friki &ndash; Študentsko društvo FRI
           </p>
           <p className="text-border text-sm font-mono">
             FRI &middot; Univerza v Ljubljani

@@ -28,16 +28,30 @@ Phase 3  ⬜  Admin UI — password-protected event/gallery management (future)
 
 ## GIT WORKFLOW
 
-**Active branches:** `main`, `feature/sanity-setup` (both pushed to remote)
+**Active branches (all unmerged, all local):**
+- `main` — initial scaffold + README + ui-palette-dimmed merged
+- `feature/ui-palette-dimmed` — palette shift, token cleanup, bento archive, roundness
+- `feature/sanity-setup` — Sanity CMS scaffold + live data wiring
+- `feature/ui-animations` — auto-rotating carousel, card-level hover pause, arrow repositioning
+- `feature/archive-anim-staggered` — directional assembly animation (the chosen one) ✅ **CURRENT**
+- `feature/archive-anim-simultaneous` — unused alternate animation branch
 
-**Current branch:** `feature/sanity-setup`  
-**Remote:** `https://github.com/Amadejh/friki-website.git`  
-**Last commit on main:** `feat: Sanity CMS integration — schema, studio, live data` (merge commit)  
-**Merged:** `feature/sanity-setup` → `main` (Session 5) · `feature/ui-palette-dimmed` → `main` (Session 4)
+**Current branch:** `feature/archive-anim-staggered`
+**Remote:** `https://github.com/Amadejh/friki-website.git`
 
-**Branch naming:** `feature/ui-*`, `feature/*`, `feature/api-*`, `fix/*`, `feature/i18n-*`, `chore/*`
+**Pending:** All feature branches need to be merged into `main` in order and pushed.
 
-**Flow:** feature branches → merge toward `main` when CI/build rules are satisfied (see `CLAUDE.md`).
+**Merge order:**
+```
+git checkout main
+git merge --no-ff feature/ui-palette-dimmed
+git merge --no-ff feature/sanity-setup
+git merge --no-ff feature/ui-animations
+git merge --no-ff feature/archive-anim-staggered
+git branch -d feature/archive-anim-simultaneous
+git push origin main
+git push origin --delete feature/archive-anim-simultaneous
+```
 
 ---
 
@@ -76,7 +90,7 @@ All API keys empty until services are connected. See `.env.example`.
 | `components/archive.tsx` | ✅ | |
 | `components/footer.tsx` | ✅ | |
 | `components/event-detail-view.tsx` | ✅ | |
-| `components/theme-provider.tsx` | ✅ | Present but **unused** (next-themes) |
+| `components/theme-provider.tsx` | ⚠️ | Present but **unused** — delete when convenient |
 | `components/ui/*` | ✅ | shadcn — not imported by custom pages yet |
 | `lib/data.ts` | 🗑️ | **Deleted** — replaced by Sanity queries |
 | `lib/sanity/types.ts` | ✅ | `SanityEvent` interface |
@@ -126,7 +140,19 @@ Then: `/events` index (Phase 1g), Stripe flow (1h–1i), remaining pages (1j), p
 
 ## SESSION LOG
 
-### Session 5 (cont.) — April 5, 2026 — Wire components to Sanity (`feature/sanity-setup`)
+### Session 6 — April 5, 2026 — Final code sweep + doc update
+
+- Fixed all regressions from Opus session: translations, text sizes, copyright.
+- `lib/translations.ts`: updated all "Študentski svet" / "student council" → "Študentsko društvo" / "student association" (heading, body, footer desc).
+- `components/hero.tsx`: subtitle text-xs → text-sm, eyebrow text-xs → text-sm, body text-base → text-lg, subtitle copy corrected.
+- `components/events-carousel.tsx`: eyebrow text-xs → text-sm.
+- `components/archive.tsx`: eyebrow text-xs → text-sm, search input bg-background → bg-card, border-border → border-muted-foreground.
+- `components/footer.tsx`: all text sizes bumped, social icons w-8 h-8 → w-10 h-10 (Icon 14 → 16), copyright copy corrected to "Študentsko društvo".
+- `SESSION_CONTEXT.md`: git workflow section rewritten to reflect actual branch state.
+- `SELF_IMPROVEMENT_LOG.md`: added Lessons 4–7 (cache, Sanity basePath, metadata/client split, overflow-hidden clipping).
+- **All feature branches still unmerged** — merge into main is the next pending action.
+
+### Session 5 (cont.) — April 5, 2026 — UI animations (`feature/archive-anim-staggered`)
 
 - `lib/sanity/types.ts`: `SanityEvent` interface (replaces `Event` from `lib/data.ts`).
 - `app/page.tsx`: converted to async server component; fetches `upcomingEvents` + `archiveEvents` from Sanity in parallel; `revalidate = 60`.

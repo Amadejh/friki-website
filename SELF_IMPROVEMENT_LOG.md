@@ -91,7 +91,53 @@ When URL-based locales are added, follow next-intl App Router patterns (`setRequ
 
 ---
 
-## REFERENCE: COMMON PATTERNS FOR THIS STACK
+## LESSON 4: .next cache must be cleared when CSS variables change
+
+**Date:** April 4, 2026
+
+**Problem:** After shifting `--background` from `var(--white)` to `var(--light-grey)` in `globals.css`, the site still showed white because the Turbopack dev server had the old compiled CSS cached in `.next`.
+
+**What worked:** Deleting `.next` with `Remove-Item -Recurse -Force .next` and restarting `npm run dev`.
+
+**Rule for next time:** Any change inside `@theme inline {}` or `:root {}` that doesn't hot-reload correctly means the `.next` cache is stale. Kill the server, delete `.next`, restart. This is specific to Tailwind v4 + Turbopack.
+
+---
+
+## LESSON 5: Sanity Studio requires `basePath` in `defineConfig`
+
+**Date:** April 5, 2026
+
+**Problem:** Navigating to `/studio` showed "tool not found: studio" — Sanity's internal router couldn't resolve its own route.
+
+**What worked:** Adding `basePath: '/studio'` to `defineConfig()` in `sanity.config.ts`. Without this Sanity doesn't know where it's hosted.
+
+**Rule for next time:** Always set `basePath` to match the route where the Studio is embedded. For this project: `basePath: '/studio'`.
+
+---
+
+## LESSON 6: `metadata` cannot be exported from a `'use client'` file
+
+**Date:** April 5, 2026
+
+**Problem:** Adding `export { metadata, viewport } from 'next-sanity/studio'` to the Studio page file (which had `'use client'`) caused a build error — metadata must be resolved on the server.
+
+**What worked:** Splitting into two files: a server component `page.tsx` that exports `metadata` and `viewport` inline, and a `studio-client.tsx` with `'use client'` that renders `<NextStudio>`.
+
+**Rule for next time:** Any page that needs both `metadata` exports and client-side rendering must be split — server page renders a client component child. Never put `export const metadata` in a `'use client'` file.
+
+---
+
+## LESSON 7: `overflow-hidden` on a section clips negatively-positioned arrow buttons
+
+**Date:** April 5, 2026
+
+**Problem:** Carousel arrow buttons positioned at `absolute -left-14` were invisible — clipped by `overflow-hidden` on the parent section.
+
+**What worked:** Removing `overflow-hidden` from the `<section>` and keeping it only on the inner track `<div>`. The section's padding space then becomes available for the arrows.
+
+**Rule for next time:** Never put `overflow-hidden` on a container that has absolute children that need to escape it. Move it to the smallest possible inner wrapper.
+
+---
 
 ### Pattern: Supabase typed client (when added)
 ```typescript

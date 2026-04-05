@@ -95,7 +95,7 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
             onClick={prev}
             disabled={currentIndex === 0}
             aria-label={t.carousel.prevEvents[lang]}
-            className="absolute -left-4 md:-left-5 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+            className="absolute -left-14 md:-left-16 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
           >
             <ChevronLeft size={18} />
           </button>
@@ -103,7 +103,7 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
             type="button"
             onClick={next}
             aria-label={t.carousel.nextEvents[lang]}
-            className="absolute -right-4 md:-right-5 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+            className="absolute -right-14 md:-right-16 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
           >
             <ChevronRight size={18} />
           </button>
