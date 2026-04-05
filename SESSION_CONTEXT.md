@@ -126,6 +126,10 @@ Then: `/events` index (Phase 1g), Stripe flow (1h–1i), remaining pages (1j), p
 
 ## SESSION LOG
 
+### Session 8 — April 5, 2026 — Carousel swipe gestures + hooks fix (`fix/carousel-hooks-swipe`)
+
+- `components/events-carousel.tsx`: lifted `touchStartX` ref to component scope, stripped resize `useEffect` back to check/listener/cleanup only, added `handleTouchStart`/`handleTouchEnd` as `useCallback` after `next`/`prev`, wired both to overflow div via `onTouchStart`/`onTouchEnd`, changed mobile poster ratio `aspect-[3/2]` → `aspect-[3/4]`.
+
 ### Session 7 — April 5, 2026 — All feature branches merged into main
 
 - All feature branches merged into `main` in order: `ui-palette-dimmed` → `sanity-setup` → `ui-animations` → `archive-anim-staggered`.
