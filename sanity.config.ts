@@ -6,6 +6,7 @@ import { schemaTypes } from './schemas'
 export default defineConfig({
   name: 'friki-website',
   title: 'FRIKi',
+  basePath: '/studio',
 
   projectId: 'vwe4wudl',
   dataset: 'production',
