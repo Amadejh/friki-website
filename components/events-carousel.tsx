@@ -95,7 +95,7 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
             onClick={prev}
             disabled={currentIndex === 0}
             aria-label={t.carousel.prevEvents[lang]}
-            className="absolute -left-14 md:-left-16 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+            className="hidden md:flex absolute -left-16 top-1/2 -translate-y-1/2 z-10 w-12 h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed items-center justify-center"
           >
             <ChevronLeft size={18} />
           </button>
@@ -103,15 +103,18 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
             type="button"
             onClick={next}
             aria-label={t.carousel.nextEvents[lang]}
-            className="absolute -right-14 md:-right-16 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+            className="hidden md:flex absolute -right-16 top-1/2 -translate-y-1/2 z-10 w-12 h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed items-center justify-center"
           >
             <ChevronRight size={18} />
           </button>
 
-          <div className="overflow-hidden" ref={trackRef}>
+          <div
+            className="overflow-hidden [--cards-visible:1] md:[--cards-visible:3] [--gap-offset:0px] md:[--gap-offset:5.5px]"
+            ref={trackRef}
+          >
           <div
             className="flex gap-4 transition-transform duration-500 ease-in-out"
-            style={{ transform: `translateX(calc(-${currentIndex} * (100% / 3 + 5.5px)))` }}
+            style={{ transform: `translateX(calc(-${currentIndex} * (100% / var(--cards-visible, 1) + var(--gap-offset, 0px))))` }}
           >
             {events.map((event) => (
               <Link
@@ -175,11 +178,15 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
             <button
               key={i}
               onClick={() => goToSlide(i)}
-              className={`h-px rounded-none transition-all duration-300 ${
-                i === currentIndex ? 'w-8 bg-primary' : 'w-4 bg-border'
+              className={`h-4 flex items-center justify-center transition-all duration-300 ${
+                i === currentIndex ? 'w-8' : 'w-4'
               }`}
               aria-label={`${t.carousel.goToSlide[lang]} ${i + 1}`}
-            />
+            >
+              <span className={`block h-px transition-all duration-300 ${
+                i === currentIndex ? 'w-8 bg-primary' : 'w-4 bg-border'
+              }`} />
+            </button>
           ))}
         </div>
       </div>

@@ -24,6 +24,16 @@ const BENTO_LAYOUT = [
   { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 6: small — bottom-right
 ] as const
 
+const BENTO_MOBILE_COLS = [
+  'col-span-2',  // 0: wide — fills 2-col mobile grid
+  'col-span-1',  // 1
+  'col-span-1',  // 2
+  'col-span-1',  // 3
+  'col-span-1',  // 4
+  'col-span-1',  // 5
+  'col-span-1',  // 6
+] as const
+
 const BENTO_DIRECTIONS = [
   'animate-from-left',   // 0: wide top-left   — enters from left
   'animate-from-top',    // 1: small top-right  — enters from top
@@ -108,12 +118,13 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
 
   const openModal = (event: SanityEvent, originEl: HTMLElement) => {
     const origin = originEl.getBoundingClientRect()
-    const padding = 16
-    const width = Math.min(960, window.innerWidth - padding * 2)
-    const height = Math.min(720, window.innerHeight - padding * 2)
+    const isMobile = window.innerWidth < 768
+    const padding = isMobile ? 0 : 16
+    const width = isMobile ? window.innerWidth : Math.min(960, window.innerWidth - padding * 2)
+    const height = isMobile ? window.innerHeight : Math.min(720, window.innerHeight - padding * 2)
     const end: Rect = {
-      left: (window.innerWidth - width) / 2,
-      top: (window.innerHeight - height) / 2,
+      left: isMobile ? 0 : (window.innerWidth - width) / 2,
+      top: isMobile ? 0 : (window.innerHeight - height) / 2,
       width,
       height,
     }
@@ -163,7 +174,7 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
               }}
               disabled={currentPage === 0}
               aria-label={t.archive.prevPage[lang]}
-              className="flex items-center justify-center absolute -left-14 md:-left-16 top-1/2 -translate-y-1/2 w-9 h-20 md:w-12 md:h-24 rounded-full bg-white/95 border border-border text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              className="hidden md:flex items-center justify-center absolute -left-16 top-1/2 -translate-y-1/2 w-12 h-24 rounded-full bg-white/95 border border-border text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <ChevronLeft size={18} />
             </button>
@@ -178,7 +189,7 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
               }}
               disabled={currentPage >= slides.length - 1}
               aria-label={t.archive.nextPage[lang]}
-              className="flex items-center justify-center absolute -right-14 md:-right-16 top-1/2 -translate-y-1/2 w-9 h-20 md:w-12 md:h-24 rounded-full bg-white/95 border border-border text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              className="hidden md:flex items-center justify-center absolute -right-16 top-1/2 -translate-y-1/2 w-12 h-24 rounded-full bg-white/95 border border-border text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <ChevronRight size={18} />
             </button>
@@ -192,7 +203,7 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
               {slides.map((pageEvents, pageIdx) => (
                 <div key={`${pageIdx}`} className="min-w-full">
                   <div
-                    className="grid grid-cols-3 auto-rows-[200px] gap-3"
+                    className="grid grid-cols-2 md:grid-cols-3 auto-rows-[160px] md:auto-rows-[200px] gap-2 md:gap-3"
                     aria-label={`${t.archive.pageLabel[lang]} ${pageIdx + 1}`}
                   >
                     {pageEvents.map((event, idx) => {
@@ -207,7 +218,8 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
                             'group relative text-left rounded-xl overflow-hidden border border-border',
                             'hover:shadow-lg transition-all duration-300',
                             BENTO_DIRECTIONS[idx] ?? 'animate-from-top',
-                            layout.colSpan,
+                            BENTO_MOBILE_COLS[idx] ?? 'col-span-1',
+                            `md:${layout.colSpan}`,
                             layout.rowSpan
                           )}
                           aria-label={`${t.archive.openDetails[lang]} ${event.name}`}
@@ -257,8 +269,10 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
                     setAnimationKey((k) => k + 1)
                   }}
                   aria-label={`${t.archive.goToPage[lang]} ${i + 1}`}
-                  className={`h-px transition-all duration-200 ${i === currentPage ? 'w-10 bg-primary' : 'w-4 bg-border'}`}
-                />
+                  className={`h-4 flex items-center justify-center px-1 transition-all duration-200`}
+                >
+                  <span className={`block h-px transition-all duration-200 ${i === currentPage ? 'w-10 bg-primary' : 'w-4 bg-border'}`} />
+                </button>
               ))}
             </div>
           )}
@@ -280,7 +294,7 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
                 top: modalExpanded ? modalEnd.top : modalOrigin.top,
                 width: modalExpanded ? modalEnd.width : modalOrigin.width,
                 height: modalExpanded ? modalEnd.height : modalOrigin.height,
-                borderRadius: modalExpanded ? 16 : 10,
+                borderRadius: modalExpanded ? (window.innerWidth < 768 ? 0 : 16) : 10,
               }}
               role="dialog"
               aria-modal="true"
