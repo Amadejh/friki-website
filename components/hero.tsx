@@ -27,7 +27,7 @@ export default function Hero() {
           {/* Drop friki-logo.png into public/ to replace this text logo */}
           <span className="text-foreground text-4xl md:text-5xl font-bold tracking-tight font-mono">FRIKI</span>
           <p className="text-primary text-xs font-semibold uppercase tracking-[0.2em] mt-3 font-mono">
-            Študentski svet FRI · Ljubljana, Slovenija
+            Študentsko društvo FRI · Ljubljana, Slovenija
           </p>
         </div>
       </div>
@@ -35,7 +35,7 @@ export default function Hero() {
       {/* PART B — About strip */}
       <div className="bg-background py-12 md:py-16 border-b border-border">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <p className="text-primary text-xs font-semibold uppercase tracking-[0.2em] mb-4 font-mono">
+          <p className="text-primary text-sm font-semibold uppercase tracking-[0.2em] mb-4 font-mono">
             {t.hero.eyebrow[lang]}
           </p>
           <h1 className="text-foreground text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-4 max-w-2xl">

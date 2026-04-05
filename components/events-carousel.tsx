@@ -30,7 +30,7 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
         {/* Heading row */}
         <div className="flex items-end justify-between mb-10 md:mb-14">
           <div>
-            <p className="text-primary text-xs font-semibold uppercase tracking-[0.2em] mb-3 font-mono">
+            <p className="text-primary text-sm font-semibold uppercase tracking-[0.2em] mb-3 font-mono">
               {t.carousel.eyebrow[lang]}
             </p>
             <h2 className="text-foreground text-3xl md:text-4xl font-bold tracking-tight leading-none">

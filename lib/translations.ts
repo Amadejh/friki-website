@@ -12,10 +12,10 @@ export const t = {
   // Hero
   hero: {
     eyebrow: { SL: 'Kdo smo', EN: 'Who we are' },
-    heading: { SL: 'Študentski svet FRI.', EN: 'The student council of FRI.' },
+    heading: { SL: 'Študentsko društvo FRI.', EN: 'The student association of FRI.' },
     body: {
-      SL: 'FRIKi je študentski svet Fakultete za računalništvo in informatiko Univerze v Ljubljani. Zastopamo interese študentov, organiziramo dogodke in gradimo skupnost znotraj FRI.',
-      EN: 'FRIKi is the student council of the Faculty of Computer and Information Science at the University of Ljubljana. We represent student interests, organise events, and build community within FRI.',
+      SL: 'FRIKi je študentsko društvo Fakultete za računalništvo in informatiko Univerze v Ljubljani. Zastopamo interese študentov, organiziramo dogodke in gradimo skupnost znotraj FRI.',
+      EN: 'FRIKi is the student association of the Faculty of Computer and Information Science at the University of Ljubljana. We represent student interests, organise events, and build community within FRI.',
     },
   },
   // Events carousel
@@ -53,8 +53,8 @@ export const t = {
     navigate: { SL: 'Navigacija', EN: 'Navigate' },
     connect: { SL: 'Povežite se', EN: 'Connect' },
     desc: {
-      SL: 'Študentski svet Fakultete za računalništvo in informatiko Univerze v Ljubljani.',
-      EN: 'The student council of the Faculty of Computer and Information Science, University of Ljubljana.',
+      SL: 'Študentsko društvo Fakultete za računalništvo in informatiko Univerze v Ljubljani.',
+      EN: 'The student association of the Faculty of Computer and Information Science, University of Ljubljana.',
     },
     questions: { SL: 'Vprašanja?', EN: 'Questions?' },
     getInTouch: { SL: 'Stopite v stik.', EN: 'Get in touch.' },

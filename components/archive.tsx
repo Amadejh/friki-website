@@ -123,7 +123,7 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Heading */}
         <div className="mb-6 md:mb-10">
-          <p className="text-primary text-xs font-semibold uppercase tracking-[0.2em] mb-3 font-mono">
+          <p className="text-primary text-sm font-semibold uppercase tracking-[0.2em] mb-3 font-mono">
             {t.archive.eyebrow[lang]}
           </p>
           <h2 className="text-foreground text-3xl md:text-4xl font-bold tracking-tight leading-none">
