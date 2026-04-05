@@ -13,6 +13,7 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
   const trackRef = useRef<HTMLDivElement>(null)
+  const touchStartX = useRef<number | null>(null)
   const { lang } = useLang()
 
   useEffect(() => {
@@ -77,6 +78,20 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
     pauseThenResume()
   }, [pauseThenResume])
 
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }, [])
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (touchStartX.current === null) return
+    const diff = touchStartX.current - e.changedTouches[0].clientX
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) next()
+      else prev()
+    }
+    touchStartX.current = null
+  }, [next, prev])
+
   return (
     <section
       id="events"
@@ -119,6 +134,8 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
           <div
             className="overflow-hidden"
             ref={trackRef}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
           <div
             className="flex gap-4 transition-transform duration-500 ease-in-out"
@@ -137,7 +154,7 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
                 onMouseLeave={() => { isPausedRef.current = false }}
               >
                 {/* Poster */}
-                <div className="aspect-[4/5] overflow-hidden bg-background">
+                <div className="aspect-[3/4] md:aspect-[4/5] overflow-hidden bg-background">
                   <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                     <Image
                       src={event.poster ? urlFor(event.poster).width(400).height(500).url() : '/placeholder.jpg'}
