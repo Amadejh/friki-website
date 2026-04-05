@@ -11,11 +11,19 @@ import type { SanityEvent } from '@/lib/sanity/types'
 
 export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
   const trackRef = useRef<HTMLDivElement>(null)
   const { lang } = useLang()
 
-  const totalVisible = 3
-  const maxIndex = Math.max(0, events.length - totalVisible)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
+  const visibleCount = isMobile ? 1 : 3
+  const maxIndex = Math.max(0, events.length - visibleCount)
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -109,18 +117,21 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
           </button>
 
           <div
-            className="overflow-hidden [--cards-visible:1] md:[--cards-visible:3] [--gap-offset:0px] md:[--gap-offset:5.5px]"
+            className="overflow-hidden"
             ref={trackRef}
           >
           <div
             className="flex gap-4 transition-transform duration-500 ease-in-out"
-            style={{ transform: `translateX(calc(-${currentIndex} * (100% / var(--cards-visible, 1) + var(--gap-offset, 0px))))` }}
+            style={{ transform: isMobile
+              ? `translateX(-${currentIndex * 100}%)`
+              : `translateX(calc(-${currentIndex} * (100% / 3 + 5.5px)))`
+            }}
           >
             {events.map((event) => (
               <Link
                 key={event.slug}
                 href={`/events/${event.slug}`}
-                className="group flex-shrink-0 w-full md:w-[calc(33.333%-11px)] max-w-[320px] mx-auto md:max-w-none md:mx-0 bg-white border border-border rounded-xl overflow-hidden hover:border-border hover:shadow-md transition-all duration-200 flex flex-col"
+                className="group flex-shrink-0 w-full md:w-[calc(33.333%-11px)] bg-white border border-border rounded-xl overflow-hidden hover:border-border hover:shadow-md transition-all duration-200 flex flex-col"
                 aria-label={`${t.carousel.viewDetails[lang]} ${event.name}`}
                 onMouseEnter={() => { isPausedRef.current = true }}
                 onMouseLeave={() => { isPausedRef.current = false }}
