@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useEffect, useCallback } from 'react'
+import { useRef, useState, useEffect, useLayoutEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ChevronLeft, ChevronRight, MapPin, Calendar } from 'lucide-react'
@@ -11,20 +11,33 @@ import type { SanityEvent } from '@/lib/sanity/types'
 
 export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [isMobile, setIsMobile] = useState(false)
+  const [cardWidth, setCardWidth] = useState(0)
+  const [visibleCount, setVisibleCount] = useState(1)
   const trackRef = useRef<HTMLDivElement>(null)
   const touchStartX = useRef<number | null>(null)
   const { lang } = useLang()
 
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768)
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
+  useLayoutEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+
+    const measure = () => {
+      const firstCard = track.children[0] as HTMLElement | undefined
+      if (!firstCard) return
+      const cw = firstCard.offsetWidth
+      const tw = track.offsetWidth
+      const vc = Math.max(1, Math.round(tw / (cw + 16)))
+      setCardWidth(cw)
+      setVisibleCount(vc)
+    }
+
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(track)
+    return () => ro.disconnect()
   }, [])
 
-  const visibleCount = isMobile ? 1 : 3
-  const maxIndex = Math.max(0, events.length - visibleCount)
+  const maxIndex = cardWidth === 0 ? 0 : Math.max(0, events.length - visibleCount)
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -95,17 +108,17 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
   return (
     <section
       id="events"
-      className="w-full bg-card border-t border-border py-16 md:py-24"
+      className="w-full bg-card border-t border-border py-12 md:py-24"
       aria-label={t.carousel.heading[lang]}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Heading row */}
-        <div className="flex items-end justify-between mb-10 md:mb-14">
+        <div className="flex items-end justify-between mb-8 md:mb-14">
           <div>
             <p className="text-primary text-sm font-semibold uppercase tracking-[0.2em] mb-3 font-mono">
               {t.carousel.eyebrow[lang]}
             </p>
-            <h2 className="text-foreground text-3xl md:text-4xl font-bold tracking-tight leading-none">
+            <h2 className="text-foreground text-2xl md:text-4xl font-bold tracking-tight leading-none">
               {t.carousel.heading[lang]}
             </h2>
           </div>
@@ -137,66 +150,63 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
           >
-          <div
-            className="flex gap-4 transition-transform duration-500 ease-in-out"
-            style={{ transform: isMobile
-              ? `translateX(-${currentIndex * 100}%)`
-              : `translateX(calc(-${currentIndex} * (100% / 3 + 5.5px)))`
-            }}
-          >
-            {events.map((event) => (
-              <Link
-                key={event.slug}
-                href={`/events/${event.slug}`}
-                className="group flex-shrink-0 w-full md:w-[calc(33.333%-11px)] bg-white border border-border rounded-xl overflow-hidden hover:border-border hover:shadow-md transition-all duration-200 flex flex-col"
-                aria-label={`${t.carousel.viewDetails[lang]} ${event.name}`}
-                onMouseEnter={() => { isPausedRef.current = true }}
-                onMouseLeave={() => { isPausedRef.current = false }}
-              >
-                {/* Poster */}
-                <div className="aspect-[3/4] md:aspect-[4/5] overflow-hidden bg-background">
-                  <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                    <Image
-                      src={event.poster ? urlFor(event.poster).width(400).height(500).url() : '/placeholder.jpg'}
-                      alt={`${event.name} poster`}
-                      fill
-                      unoptimized
-                      className="object-cover group-hover:scale-105 transition-all duration-500"
-                    />
-                    <span className="absolute top-3 left-3 px-2 py-0.5 bg-primary text-primary-foreground text-xs font-mono font-medium rounded-md">
-                      {event.category}
+            <div
+              className="flex gap-4 transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${currentIndex * (cardWidth + 16)}px)` }}
+            >
+              {events.map((event) => (
+                <Link
+                  key={event.slug}
+                  href={`/events/${event.slug}`}
+                  className="group flex-shrink-0 w-full md:w-[calc(33.333%-11px)] bg-white border border-border rounded-xl overflow-hidden hover:border-border hover:shadow-md transition-all duration-200 flex flex-col"
+                  aria-label={`${t.carousel.viewDetails[lang]} ${event.name}`}
+                  onMouseEnter={() => { isPausedRef.current = true }}
+                  onMouseLeave={() => { isPausedRef.current = false }}
+                >
+                  {/* Poster */}
+                  <div className="aspect-[3/4] md:aspect-[4/5] overflow-hidden bg-background">
+                    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                      <Image
+                        src={event.poster ? urlFor(event.poster).width(400).height(500).url() : '/placeholder.jpg'}
+                        alt={`${event.name} poster`}
+                        fill
+                        unoptimized
+                        className="object-cover group-hover:scale-105 transition-all duration-500"
+                      />
+                      <span className="absolute top-3 left-3 px-2 py-0.5 bg-primary text-primary-foreground text-xs font-mono font-medium rounded-md">
+                        {event.category}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex flex-col flex-1 p-4 md:p-5 gap-3">
+                    <h3 className="text-foreground font-semibold text-base leading-snug tracking-tight">
+                      {event.name}
+                    </h3>
+
+                    <div className="flex flex-col gap-1.5">
+                      <div className="flex items-center gap-2 text-muted-foreground text-xs font-mono">
+                        <Calendar size={11} className="flex-shrink-0 text-primary" />
+                        <span>{event.date}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-muted-foreground text-xs font-mono">
+                        <MapPin size={11} className="flex-shrink-0 text-primary" />
+                        <span>{event.location}</span>
+                      </div>
+                    </div>
+
+                    <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 flex-1">
+                      {event.teaser}
+                    </p>
+
+                    <span className="inline-flex items-center justify-center w-full mt-auto px-4 py-2 rounded-md bg-primary text-primary-foreground text-xs font-semibold uppercase tracking-widest hover:bg-deep-red-dark transition-colors duration-150">
+                      {t.carousel.viewEvent[lang]}
                     </span>
                   </div>
-                </div>
-
-                {/* Content */}
-                <div className="flex flex-col flex-1 p-5 gap-3">
-                  <h3 className="text-foreground font-semibold text-base leading-snug tracking-tight">
-                    {event.name}
-                  </h3>
-
-                  <div className="flex flex-col gap-1.5">
-                    <div className="flex items-center gap-2 text-muted-foreground text-xs font-mono">
-                      <Calendar size={11} className="flex-shrink-0 text-primary" />
-                      <span>{event.date}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-muted-foreground text-xs font-mono">
-                      <MapPin size={11} className="flex-shrink-0 text-primary" />
-                      <span>{event.location}</span>
-                    </div>
-                  </div>
-
-                  <p className="text-muted-foreground text-sm leading-relaxed line-clamp-2 flex-1">
-                    {event.teaser}
-                  </p>
-
-                  <span className="inline-flex items-center justify-center w-full mt-auto px-4 py-2 rounded-md bg-primary text-primary-foreground text-xs font-semibold uppercase tracking-widest hover:bg-deep-red-dark transition-colors duration-150">
-                    {t.carousel.viewEvent[lang]}
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -206,7 +216,7 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
             <button
               key={i}
               onClick={() => goToSlide(i)}
-              className={`h-4 flex items-center justify-center transition-all duration-300 ${
+              className={`h-6 md:h-4 flex items-center justify-center transition-all duration-300 ${
                 i === currentIndex ? 'w-8' : 'w-4'
               }`}
               aria-label={`${t.carousel.goToSlide[lang]} ${i + 1}`}

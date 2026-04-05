@@ -126,6 +126,10 @@ Then: `/events` index (Phase 1g), Stripe flow (1h–1i), remaining pages (1j), p
 
 ## SESSION LOG
 
+### Session 9 — April 5, 2026 — Carousel mobile-first rewrite (`fix/carousel-mobile-first`)
+
+- `components/events-carousel.tsx`: removed `isMobile` state and resize `useEffect`; replaced with `cardWidth`/`visibleCount` state measured via `useLayoutEffect` + `ResizeObserver` on the track container; transform is now `translateX(-${currentIndex * (cardWidth + 16)}px)` — no branching. `maxIndex` guards to 0 while unmeasured. Mobile layout: `py-12`, `text-2xl`, `mb-8`, `p-4 md:p-5`, dot tap target `h-6 md:h-4`.
+
 ### Session 8 — April 5, 2026 — Carousel swipe gestures + hooks fix (`fix/carousel-hooks-swipe`)
 
 - `components/events-carousel.tsx`: lifted `touchStartX` ref to component scope, stripped resize `useEffect` back to check/listener/cleanup only, added `handleTouchStart`/`handleTouchEnd` as `useCallback` after `next`/`prev`, wired both to overflow div via `onTouchStart`/`onTouchEnd`, changed mobile poster ratio `aspect-[3/2]` → `aspect-[3/4]`.
