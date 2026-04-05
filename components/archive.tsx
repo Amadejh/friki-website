@@ -24,6 +24,16 @@ const BENTO_LAYOUT = [
   { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 6: small — bottom-right
 ] as const
 
+const BENTO_DIRECTIONS = [
+  'animate-from-left',   // 0: wide top-left   — enters from left
+  'animate-from-top',    // 1: small top-right  — enters from top
+  'animate-from-left',   // 2: small mid-left   — enters from left
+  'animate-from-top',    // 3: tall center      — enters from top
+  'animate-from-right',  // 4: small mid-right  — enters from right
+  'animate-from-bottom', // 5: small bot-left   — enters from bottom
+  'animate-from-right',  // 6: small bot-right  — enters from right
+] as const
+
 export default function Archive({ events }: { events: SanityEvent[] }) {
   const [query, setQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(0)
@@ -153,7 +163,7 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
               }}
               disabled={currentPage === 0}
               aria-label={t.archive.prevPage[lang]}
-              className="flex items-center justify-center absolute -left-4 md:-left-5 top-1/2 -translate-y-1/2 w-9 h-20 md:w-12 md:h-24 rounded-full bg-white/95 border border-border text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center justify-center absolute -left-14 md:-left-16 top-1/2 -translate-y-1/2 w-9 h-20 md:w-12 md:h-24 rounded-full bg-white/95 border border-border text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <ChevronLeft size={18} />
             </button>
@@ -168,7 +178,7 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
               }}
               disabled={currentPage >= slides.length - 1}
               aria-label={t.archive.nextPage[lang]}
-              className="flex items-center justify-center absolute -right-4 md:-right-5 top-1/2 -translate-y-1/2 w-9 h-20 md:w-12 md:h-24 rounded-full bg-white/95 border border-border text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center justify-center absolute -right-14 md:-right-16 top-1/2 -translate-y-1/2 w-9 h-20 md:w-12 md:h-24 rounded-full bg-white/95 border border-border text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <ChevronRight size={18} />
             </button>
@@ -192,11 +202,11 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
                           key={`${animationKey}-${event.slug}`}
                           type="button"
                           onClick={(e) => openModal(event, e.currentTarget)}
-                          style={{ animationDelay: `${idx * 60}ms` }}
+                          style={{ animationDelay: `${idx * 80}ms` }}
                           className={cn(
                             'group relative text-left rounded-xl overflow-hidden border border-border',
                             'hover:shadow-lg transition-all duration-300',
-                            'animate-fade-in-up',
+                            BENTO_DIRECTIONS[idx] ?? 'animate-from-top',
                             layout.colSpan,
                             layout.rowSpan
                           )}

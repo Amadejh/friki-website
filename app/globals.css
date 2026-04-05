@@ -73,25 +73,28 @@
   --color-deep-red-dark: #C42A26;
 }
 
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes fade-in-left {
+  from { opacity: 0; transform: translateX(-28px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
-
-@theme inline {
-  --animate-fade-in-up: fade-in-up 0.3s ease-out both;
+@keyframes fade-in-right {
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes fade-in-top {
+  from { opacity: 0; transform: translateY(-28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in-bottom {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @layer utilities {
-  .animate-fade-in-up {
-    animation: var(--animate-fade-in-up);
-  }
+  .animate-from-left   { animation: fade-in-left   0.35s ease-out both; }
+  .animate-from-right  { animation: fade-in-right  0.35s ease-out both; }
+  .animate-from-top    { animation: fade-in-top    0.35s ease-out both; }
+  .animate-from-bottom { animation: fade-in-bottom 0.35s ease-out both; }
 }
 
 @layer base {
