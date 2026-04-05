@@ -120,7 +120,7 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
               <Link
                 key={event.slug}
                 href={`/events/${event.slug}`}
-                className="group flex-shrink-0 w-full md:w-[calc(33.333%-11px)] bg-white border border-border rounded-xl overflow-hidden hover:border-border hover:shadow-md transition-all duration-200 flex flex-col"
+                className="group flex-shrink-0 w-full md:w-[calc(33.333%-11px)] max-w-[320px] mx-auto md:max-w-none md:mx-0 bg-white border border-border rounded-xl overflow-hidden hover:border-border hover:shadow-md transition-all duration-200 flex flex-col"
                 aria-label={`${t.carousel.viewDetails[lang]} ${event.name}`}
                 onMouseEnter={() => { isPausedRef.current = true }}
                 onMouseLeave={() => { isPausedRef.current = false }}

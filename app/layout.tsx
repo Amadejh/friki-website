@@ -19,14 +19,19 @@ const ibmPlexMono = IBM_Plex_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Friki – Študentski svet FRI',
-  description: 'Friki is the student council of the Faculty of Computer and Information Science (FRI) in Ljubljana, Slovenia. Connecting students, shaping faculty life.',
-  keywords: ['Friki', 'FRI', 'student council', 'Faculty of Computer and Information Science', 'Ljubljana', 'Slovenia'],
+  title: 'Friki – Študentsko društvo FRI',
+  description: 'Friki is the student association of the Faculty of Computer and Information Science (FRI) in Ljubljana, Slovenia. Connecting students, shaping faculty life.',
+  keywords: ['Friki', 'FRI', 'student association', 'Faculty of Computer and Information Science', 'Ljubljana', 'Slovenia'],
   openGraph: {
-    title: 'Friki – Študentski svet FRI',
+    title: 'Friki – Študentsko društvo FRI',
     description: 'Connecting students, shaping faculty life.',
     type: 'website',
   },
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({
@@ -36,7 +41,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="sl" className={`${ibmPlexSans.variable} ${ibmPlexMono.variable}`} data-scroll-behavior="smooth">
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased overflow-x-hidden">
         <LanguageProvider>{children}</LanguageProvider>
         <Analytics />
       </body>
