@@ -133,7 +133,7 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Heading */}
         <div className="mb-6 md:mb-10">
-          <p className="text-primary text-xs font-semibold uppercase tracking-[0.2em] mb-3 font-mono">
+          <p className="text-primary text-sm font-semibold uppercase tracking-[0.2em] mb-3 font-mono">
             {t.archive.eyebrow[lang]}
           </p>
           <h2 className="text-foreground text-3xl md:text-4xl font-bold tracking-tight leading-none">
@@ -148,7 +148,7 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t.archive.searchPlaceholder[lang]}
             aria-label={t.archive.searchLabel[lang]}
-            className="w-full px-5 py-3 rounded-full bg-background border border-border text-foreground placeholder:text-border outline-none focus:border-primary transition-colors"
+            className="w-full px-5 py-3 rounded-full bg-card border border-muted-foreground text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors"
           />
         </div>
 
@@ -202,7 +202,7 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
                           key={`${animationKey}-${event.slug}`}
                           type="button"
                           onClick={(e) => openModal(event, e.currentTarget)}
-                          style={{ animationDelay: `${idx * 80}ms` }}
+                          style={{ animationDelay: `${idx * 55}ms` }}
                           className={cn(
                             'group relative text-left rounded-xl overflow-hidden border border-border',
                             'hover:shadow-lg transition-all duration-300',

@@ -54,17 +54,17 @@ export default function Footer() {
             >
               Friki
             </Link>
-            <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
+            <p className="text-muted-foreground text-base leading-relaxed max-w-xs">
               {t.footer.desc[lang]}
             </p>
-            <p className="text-border text-xs font-mono">
+            <p className="text-border text-sm font-mono">
               Večna pot 113, 1000 Ljubljana, SI
             </p>
           </div>
 
           {/* Quick links */}
           <nav aria-label="Footer navigation">
-            <p className="text-border font-mono text-xs uppercase tracking-[0.2em] mb-5">
+            <p className="text-border font-mono text-sm uppercase tracking-[0.2em] mb-5">
               {t.footer.navigate[lang]}
             </p>
             <ul className="flex flex-col gap-2.5">
@@ -73,7 +73,7 @@ export default function Footer() {
                   <Link
                     href={link.href}
                     onClick={(e) => handleNavClick(e, link.href)}
-                    className="text-muted-foreground text-sm hover:text-foreground transition-colors duration-150"
+                    className="text-muted-foreground text-base hover:text-foreground transition-colors duration-150"
                   >
                     {link.label}
                   </Link>
@@ -84,7 +84,7 @@ export default function Footer() {
 
           {/* Social */}
           <div>
-            <p className="text-border font-mono text-xs uppercase tracking-[0.2em] mb-5">
+            <p className="text-border font-mono text-sm uppercase tracking-[0.2em] mb-5">
               {t.footer.connect[lang]}
             </p>
             <div className="flex items-center gap-3">
@@ -95,13 +95,13 @@ export default function Footer() {
                   target={href.startsWith('mailto') ? undefined : '_blank'}
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-8 h-8 rounded-md flex items-center justify-center text-muted-foreground border border-border bg-white hover:text-primary hover:border-primary transition-all duration-150"
+                  className="w-10 h-10 rounded-md flex items-center justify-center text-muted-foreground border border-border bg-white hover:text-primary hover:border-primary transition-all duration-150"
                 >
-                  <Icon size={14} />
+                  <Icon size={16} />
                 </a>
               ))}
             </div>
-            <p className="mt-6 text-muted-foreground text-sm leading-relaxed">
+            <p className="mt-6 text-muted-foreground text-base leading-relaxed">
               {t.footer.questions[lang]}{' '}
               <a
                 href="mailto:friki@fri.uni-lj.si"
@@ -115,10 +115,10 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-border text-xs font-mono">
-            &copy; 2025–2026 Friki &ndash; Študentski svet FRI
+          <p className="text-border text-sm font-mono">
+            &copy; 2025–2026 Friki &ndash; Študentsko društvo FRI
           </p>
-          <p className="text-border text-xs font-mono">
+          <p className="text-border text-sm font-mono">
             FRI &middot; Univerza v Ljubljani
           </p>
         </div>

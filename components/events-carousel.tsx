@@ -79,7 +79,7 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
         {/* Heading row */}
         <div className="flex items-end justify-between mb-10 md:mb-14">
           <div>
-            <p className="text-primary text-xs font-semibold uppercase tracking-[0.2em] mb-3 font-mono">
+            <p className="text-primary text-sm font-semibold uppercase tracking-[0.2em] mb-3 font-mono">
               {t.carousel.eyebrow[lang]}
             </p>
             <h2 className="text-foreground text-3xl md:text-4xl font-bold tracking-tight leading-none">
@@ -95,7 +95,7 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
             onClick={prev}
             disabled={currentIndex === 0}
             aria-label={t.carousel.prevEvents[lang]}
-            className="absolute -left-4 md:-left-5 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+            className="absolute -left-14 md:-left-16 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
           >
             <ChevronLeft size={18} />
           </button>
@@ -103,7 +103,7 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
             type="button"
             onClick={next}
             aria-label={t.carousel.nextEvents[lang]}
-            className="absolute -right-4 md:-right-5 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+            className="absolute -right-14 md:-right-16 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
           >
             <ChevronRight size={18} />
           </button>
