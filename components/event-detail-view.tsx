@@ -5,12 +5,13 @@ import Link from 'next/link'
 import { ArrowLeft, Calendar, Clock, MapPin, User } from 'lucide-react'
 import Navbar from '@/components/navbar'
 import Footer from '@/components/footer'
-import type { Event } from '@/lib/data'
+import type { SanityEvent } from '@/lib/sanity/types'
+import { urlFor } from '@/lib/sanity/image'
 import { useLang } from '@/lib/language-context'
 import { t } from '@/lib/translations'
 
 interface EventDetailProps {
-  event: Event
+  event: SanityEvent
 }
 
 export function View({ event }: EventDetailProps) {
@@ -29,7 +30,7 @@ export function View({ event }: EventDetailProps) {
       {/* Hero image */}
       <div style={{ position: 'relative', width: '100%', height: '60vh' }}>
         <Image
-          src={`https://picsum.photos/seed/${event.posterSeed}/1400/840`}
+          src={event.poster ? urlFor(event.poster).width(1400).height(840).url() : '/placeholder.jpg'}
           alt={`${event.name} event poster`}
           fill
           priority

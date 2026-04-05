@@ -4,17 +4,18 @@ import { useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ChevronLeft, ChevronRight, MapPin, Calendar } from 'lucide-react'
-import { upcomingEvents } from '@/lib/data'
 import { useLang } from '@/lib/language-context'
 import { t } from '@/lib/translations'
+import { urlFor } from '@/lib/sanity/image'
+import type { SanityEvent } from '@/lib/sanity/types'
 
-export default function EventsCarousel() {
+export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const trackRef = useRef<HTMLDivElement>(null)
   const { lang } = useLang()
 
   const totalVisible = 3
-  const maxIndex = Math.max(0, upcomingEvents.length - totalVisible)
+  const maxIndex = Math.max(0, events.length - totalVisible)
 
   const prev = () => setCurrentIndex((i) => Math.max(0, i - 1))
   const next = () => setCurrentIndex((i) => Math.min(maxIndex, i + 1))
@@ -64,7 +65,7 @@ export default function EventsCarousel() {
             className="flex gap-4 transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(calc(-${currentIndex} * (100% / 3 + 5.5px)))` }}
           >
-            {upcomingEvents.map((event) => (
+            {events.map((event) => (
               <Link
                 key={event.slug}
                 href={`/events/${event.slug}`}
@@ -75,7 +76,7 @@ export default function EventsCarousel() {
                 <div className="aspect-[4/5] overflow-hidden bg-background">
                   <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                     <Image
-                      src={`https://picsum.photos/seed/${event.posterSeed}/400/500`}
+                      src={event.poster ? urlFor(event.poster).width(400).height(500).url() : '/placeholder.jpg'}
                       alt={`${event.name} poster`}
                       fill
                       unoptimized

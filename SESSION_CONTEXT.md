@@ -1,6 +1,6 @@
 # FRIKI WEBSITE — Session Context
 *Read this before every Claude Code session. Source of truth for current build state.*
-*Last updated: Session 4 — April 4, 2026*
+*Last updated: Session 5 — April 5, 2026*
 
 ---
 
@@ -11,14 +11,14 @@ Phase 0  ✅  Initial scaffold — Next.js 16, shadcn/ui, IBM Plex fonts
 Phase 1a ✅  Light theme — CSS variables, globals.css, @theme inline, Tailwind v4
 Phase 1b ✅  Layout & navigation — Navbar (mobile drawer, lang toggle, section observer), Footer
 Phase 1c ✅  Hero — cinematic team photo + identity block + about strip
-Phase 1d ✅  Homepage sections — EventsCarousel (carousel + mock data), Archive (grid + modal + search)
-Phase 1e ✅  Event detail page — /events/[slug] with sidebar, breadcrumbs, hero image
+Phase 1d ✅  Homepage sections — EventsCarousel (carousel + Sanity), Archive (bento grid + modal + search + Sanity)
+Phase 1e ✅  Event detail page — /events/[slug] with sidebar, breadcrumbs, hero image (Sanity)
 Phase 1f ⬜  Lib scaffolding — config.ts, supabase-client/server, stripe, resend clients
 Phase 1g ⬜  Events page — /events list (server component)
 Phase 1h ⬜  Stripe ticket purchase flow — TicketModal + /api/checkout + /api/webhook
 Phase 1i ⬜  Success page + Resend email — /tickets/success, QR code, confirmation email
 Phase 1j ⬜  Remaining pages — /merch (coming-soon), past-events dedicated page
-Phase 1k ⬜  Connect real data — replace lib/data.ts mock data with Supabase queries
+Phase 1k ✅  Connect real data — all components wired to Sanity; lib/data.ts deleted
 Phase 1l ⬜  Polish — loading states, empty states, error boundaries, mobile QA, reduced motion
 Phase 2  ⬜  Bilingual (SL/EN) via next-intl — URL-based routing, replace context-based toggle
 Phase 3  ⬜  Admin UI — password-protected event/gallery management (future)
@@ -28,11 +28,11 @@ Phase 3  ⬜  Admin UI — password-protected event/gallery management (future)
 
 ## GIT WORKFLOW
 
-**Active branches:** `main`
+**Active branches:** `main`, **`feature/sanity-setup`** (current — Sanity CMS scaffold)
 
-**Current branch:** `main`  
+**Current branch:** `feature/sanity-setup`  
 **Remote:** `https://github.com/Amadejh/friki-website.git`  
-**Last commit on main:** `docs: update README — tighter spec, add doc pointers`  
+**Last commit on main:** `chore: add GitHub remote to SESSION_CONTEXT`  
 **Merged:** `feature/ui-palette-dimmed` → `main` (Session 4)
 
 **Branch naming:** `feature/ui-*`, `feature/*`, `feature/api-*`, `fix/*`, `feature/i18n-*`, `chore/*`
@@ -78,10 +78,18 @@ All API keys empty until services are connected. See `.env.example`.
 | `components/event-detail-view.tsx` | ✅ | |
 | `components/theme-provider.tsx` | ✅ | Present but **unused** (next-themes) |
 | `components/ui/*` | ✅ | shadcn — not imported by custom pages yet |
-| `lib/data.ts` | ✅ | Mock events |
+| `lib/data.ts` | 🗑️ | **Deleted** — replaced by Sanity queries |
+| `lib/sanity/types.ts` | ✅ | `SanityEvent` interface |
 | `lib/language-context.tsx` | ✅ | SL/EN + localStorage |
 | `lib/translations.ts` | ✅ | Copy strings |
 | `lib/utils.ts` | ✅ | `cn()` |
+| `sanity.config.ts` | ✅ | Sanity Studio config — project `vwe4wudl`, dataset `production` |
+| `schemas/event.ts` | ✅ | Event document schema |
+| `schemas/index.ts` | ✅ | Schema barrel export |
+| `lib/sanity/client.ts` | ✅ | `sanityClient` (read-only, CDN) |
+| `lib/sanity/image.ts` | ✅ | `urlFor()` image URL builder |
+| `lib/sanity/queries.ts` | ✅ | GROQ queries: upcoming, archive, by-slug, all-slugs |
+| `app/studio/[[...tool]]/page.tsx` | ✅ | Embedded Sanity Studio at `/studio` |
 | `lib/config.ts` | ⬜ | Planned |
 | `lib/config.server.ts` | ⬜ | Planned |
 | `lib/supabase-client.ts` | ⬜ | Planned |
@@ -97,9 +105,11 @@ All API keys empty until services are connected. See `.env.example`.
 
 ## WHAT TO BUILD NEXT
 
-Event detail and homepage are mock-driven. **Next:** Phase **1f** — lib scaffolding (`config`, Supabase and Stripe clients with safe placeholders, Resend wrapper) so API routes can be added without surprise build failures.
+Sanity CMS is fully wired. All components fetch live data from Sanity (`revalidate = 60`). `lib/data.ts` is deleted. Images use `urlFor()` with `/placeholder.jpg` fallback.
 
-Then: `/events` index (Phase 1g), Stripe flow (1h–1i), remaining pages (1j), Supabase data (1k), polish (1l).
+Next after wiring: Phase **1f** — lib scaffolding (`config`, Supabase and Stripe clients with safe placeholders, Resend wrapper) so API routes can be added without surprise build failures.
+
+Then: `/events` index (Phase 1g), Stripe flow (1h–1i), remaining pages (1j), polish (1l).
 
 ---
 
@@ -115,6 +125,32 @@ Then: `/events` index (Phase 1g), Stripe flow (1h–1i), remaining pages (1j), S
 ---
 
 ## SESSION LOG
+
+### Session 5 (cont.) — April 5, 2026 — Wire components to Sanity (`feature/sanity-setup`)
+
+- `lib/sanity/types.ts`: `SanityEvent` interface (replaces `Event` from `lib/data.ts`).
+- `app/page.tsx`: converted to async server component; fetches `upcomingEvents` + `archiveEvents` from Sanity in parallel; `revalidate = 60`.
+- `components/events-carousel.tsx`: accepts `events: SanityEvent[]` prop; poster uses `urlFor().width(400).height(500).url()` with `/placeholder.jpg` fallback.
+- `components/archive.tsx`: accepts `events: SanityEvent[]` prop; bento card poster uses `urlFor`; modal gallery replaced with single poster image; `getGallerySeeds` removed.
+- `components/event-detail-view.tsx`: `Event` → `SanityEvent`; hero uses `urlFor().width(1400).height(840).url()`.
+- `app/events/[slug]/page.tsx`: fetches by slug from Sanity; `generateStaticParams` from `allEventSlugsQuery`; `revalidate = 60`.
+- `lib/data.ts`: deleted — zero remaining `@/lib/data` imports confirmed.
+- `npx tsc --noEmit` passes clean.
+
+### Session 5 — April 5, 2026 — Sanity CMS scaffold (`feature/sanity-setup`)
+
+- Installed `sanity`, `next-sanity`, `@sanity/image-url`, `@sanity/vision`.
+- `sanity.config.ts`: studio config, project `vwe4wudl`, dataset `production`.
+- `schemas/event.ts`: full event document schema (name, slug, date, time, location, organizer, category, year, teaser, description, poster, isArchived, ticketsAvailable, ticketPrice).
+- `lib/sanity/client.ts`: read-only CDN client.
+- `lib/sanity/image.ts`: `urlFor()` builder — fixed import from `@sanity/image-url` (not sub-path).
+- `lib/sanity/queries.ts`: GROQ for upcoming events, archive events, event by slug, all slugs.
+- `app/studio/[[...tool]]/page.tsx`: embedded Studio route.
+- `next.config.mjs`: added `remotePatterns` for `cdn.sanity.io`.
+- `.env.example`: added Sanity section (`NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `SANITY_API_TOKEN`).
+- `agent_docs/stack.md`: Sanity packages + Studio route noted.
+- `npx tsc --noEmit` passes clean.
+- **Components still use `lib/data.ts` mock data** — Sanity data wiring is a separate step.
 
 ### Session 4 — April 4, 2026 — Merge + README (`main`)
 

@@ -70,6 +70,25 @@ npm run lint     # eslint (requires eslint available on PATH)
 
 ---
 
+## Sanity CMS
+
+| Package | Version | Role |
+|---|---|---|
+| `sanity` | installed | Studio + schema SDK |
+| `next-sanity` | installed | Next.js adapter — `createClient`, `groq`, `NextStudio` |
+| `@sanity/image-url` | installed | Image URL builder (`urlFor()`) |
+| `@sanity/vision` | installed | GROQ query explorer in Studio |
+
+- **Project ID:** `vwe4wudl` · **Dataset:** `production`
+- **Studio:** accessible at `/studio` (local dev and production via `app/studio/[[...tool]]/page.tsx`)
+- **Client:** `lib/sanity/client.ts` — read-only, CDN-backed
+- **Queries:** `lib/sanity/queries.ts` — GROQ for upcoming events, archive, event by slug, all slugs
+- **Image builder:** `lib/sanity/image.ts` — `urlFor(source)` wrapping `imageUrlBuilder`
+- **Schema:** `schemas/event.ts` + `schemas/index.ts`
+- Components still consume `lib/data.ts` mock data — Sanity wiring is a separate step.
+
+---
+
 ## Phase 2 note
 
 `next-intl` is **not** installed yet. When added, follow a dedicated routing migration — URL-based locales, not the current context-only toggle.
