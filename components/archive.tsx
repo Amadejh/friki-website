@@ -138,7 +138,7 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t.archive.searchPlaceholder[lang]}
             aria-label={t.archive.searchLabel[lang]}
-            className="w-full px-5 py-3 rounded-full bg-background border border-border text-foreground placeholder:text-border outline-none focus:border-primary transition-colors"
+            className="w-full px-5 py-3 rounded-full bg-card border border-muted-foreground text-foreground placeholder:text-muted-foreground outline-none focus:border-primary transition-colors"
           />
         </div>
 
