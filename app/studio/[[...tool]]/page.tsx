@@ -1,10 +1,10 @@
-'use client'
+import { type Metadata } from 'next'
+import StudioClient from './studio-client'
 
-import { NextStudio } from 'next-sanity/studio'
-import config from '../../../sanity.config'
-
-export { metadata, viewport } from 'next-sanity/studio'
+export const metadata: Metadata = {
+  title: 'Sanity Studio',
+}
 
 export default function StudioPage() {
-  return <NextStudio config={config} />
+  return <StudioClient />
 }
