@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 import { urlFor } from '@/lib/sanity/image'
 import type { SanityEvent } from '@/lib/sanity/types'
 
-const eventsPerPage = 9
+const eventsPerPage = 7
 const animationDurationMs = 250
 
 type Rect = { left: number; top: number; width: number; height: number }
@@ -17,18 +17,17 @@ type Rect = { left: number; top: number; width: number; height: number }
 const BENTO_LAYOUT = [
   { colSpan: 'col-span-2', rowSpan: 'row-span-1' }, // 0: wide  — top-left
   { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 1: small — top-right
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 2: small
-  { colSpan: 'col-span-1', rowSpan: 'row-span-2' }, // 3: tall  — center column
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 4: small
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 5: small
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 6: small
-  { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 7: small
-  { colSpan: 'col-span-2', rowSpan: 'row-span-1' }, // 8: wide  — bottom-right
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 2: small — mid-left
+  { colSpan: 'col-span-1', rowSpan: 'row-span-2' }, // 3: tall  — center
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 4: small — mid-right
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 5: small — bottom-left
+  { colSpan: 'col-span-1', rowSpan: 'row-span-1' }, // 6: small — bottom-right
 ] as const
 
 export default function Archive({ events }: { events: SanityEvent[] }) {
   const [query, setQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(0)
+  const [animationKey, setAnimationKey] = useState(0)
   const { lang } = useLang()
 
   const filtered = useMemo(() => {
@@ -47,6 +46,7 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
 
   useEffect(() => {
     setCurrentPage(0)
+    setAnimationKey((k) => k + 1)
   }, [query])
 
   useEffect(() => {
@@ -147,10 +147,13 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
           {slides.length > 1 && (
             <button
               type="button"
-              onClick={() => setCurrentPage((p) => Math.max(0, p - 1))}
+              onClick={() => {
+                setCurrentPage((p) => Math.max(0, p - 1))
+                setAnimationKey((k) => k + 1)
+              }}
               disabled={currentPage === 0}
               aria-label={t.archive.prevPage[lang]}
-              className="flex items-center justify-center absolute left-0 top-1/2 -translate-y-1/2 w-9 h-20 md:w-12 md:h-24 rounded-full bg-white/95 border border-border text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center justify-center absolute -left-4 md:-left-5 top-1/2 -translate-y-1/2 w-9 h-20 md:w-12 md:h-24 rounded-full bg-white/95 border border-border text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <ChevronLeft size={18} />
             </button>
@@ -159,10 +162,13 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
           {slides.length > 1 && (
             <button
               type="button"
-              onClick={() => setCurrentPage((p) => Math.min(slides.length - 1, p + 1))}
+              onClick={() => {
+                setCurrentPage((p) => Math.min(slides.length - 1, p + 1))
+                setAnimationKey((k) => k + 1)
+              }}
               disabled={currentPage >= slides.length - 1}
               aria-label={t.archive.nextPage[lang]}
-              className="flex items-center justify-center absolute right-0 top-1/2 -translate-y-1/2 w-9 h-20 md:w-12 md:h-24 rounded-full bg-white/95 border border-border text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center justify-center absolute -right-4 md:-right-5 top-1/2 -translate-y-1/2 w-9 h-20 md:w-12 md:h-24 rounded-full bg-white/95 border border-border text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             >
               <ChevronRight size={18} />
             </button>
@@ -183,12 +189,14 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
                       const layout = BENTO_LAYOUT[idx] ?? { colSpan: 'col-span-1', rowSpan: 'row-span-1' }
                       return (
                         <button
-                          key={event.slug}
+                          key={`${animationKey}-${event.slug}`}
                           type="button"
                           onClick={(e) => openModal(event, e.currentTarget)}
+                          style={{ animationDelay: `${idx * 60}ms` }}
                           className={cn(
                             'group relative text-left rounded-xl overflow-hidden border border-border',
                             'hover:shadow-lg transition-all duration-300',
+                            'animate-fade-in-up',
                             layout.colSpan,
                             layout.rowSpan
                           )}
@@ -234,7 +242,10 @@ export default function Archive({ events }: { events: SanityEvent[] }) {
                 <button
                   key={i}
                   type="button"
-                  onClick={() => setCurrentPage(i)}
+                  onClick={() => {
+                    setCurrentPage(i)
+                    setAnimationKey((k) => k + 1)
+                  }}
                   aria-label={`${t.archive.goToPage[lang]} ${i + 1}`}
                   className={`h-px transition-all duration-200 ${i === currentPage ? 'w-10 bg-primary' : 'w-4 bg-border'}`}
                 />

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ChevronLeft, ChevronRight, MapPin, Calendar } from 'lucide-react'
@@ -17,13 +17,62 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
   const totalVisible = 3
   const maxIndex = Math.max(0, events.length - totalVisible)
 
-  const prev = () => setCurrentIndex((i) => Math.max(0, i - 1))
-  const next = () => setCurrentIndex((i) => Math.min(maxIndex, i + 1))
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const isPausedRef = useRef(false)
+
+  const stopInterval = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
+  }, [])
+
+  const startInterval = useCallback(() => {
+    stopInterval()
+    intervalRef.current = setInterval(() => {
+      if (!isPausedRef.current) {
+        setCurrentIndex((i) => (i >= maxIndex ? 0 : i + 1))
+      }
+    }, 4000)
+  }, [maxIndex, stopInterval])
+
+  const pauseThenResume = useCallback(() => {
+    stopInterval()
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
+    resumeTimerRef.current = setTimeout(() => {
+      startInterval()
+      resumeTimerRef.current = null
+    }, 8000)
+  }, [stopInterval, startInterval])
+
+  useEffect(() => {
+    startInterval()
+    return () => {
+      stopInterval()
+      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
+    }
+  }, [startInterval, stopInterval])
+
+  const prev = useCallback(() => {
+    setCurrentIndex((i) => Math.max(0, i - 1))
+    pauseThenResume()
+  }, [pauseThenResume])
+
+  const next = useCallback(() => {
+    setCurrentIndex((i) => (i >= maxIndex ? 0 : i + 1))
+    pauseThenResume()
+  }, [maxIndex, pauseThenResume])
+
+  const goToSlide = useCallback((i: number) => {
+    setCurrentIndex(i)
+    pauseThenResume()
+  }, [pauseThenResume])
 
   return (
     <section
       id="events"
-      className="w-full bg-card border-t border-border py-16 md:py-24 overflow-hidden"
+      className="w-full bg-card border-t border-border py-16 md:py-24"
       aria-label={t.carousel.heading[lang]}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -46,16 +95,15 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
             onClick={prev}
             disabled={currentIndex === 0}
             aria-label={t.carousel.prevEvents[lang]}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+            className="absolute -left-4 md:-left-5 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
           >
             <ChevronLeft size={18} />
           </button>
           <button
             type="button"
             onClick={next}
-            disabled={currentIndex >= maxIndex}
             aria-label={t.carousel.nextEvents[lang]}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
+            className="absolute -right-4 md:-right-5 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
           >
             <ChevronRight size={18} />
           </button>
@@ -71,6 +119,8 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
                 href={`/events/${event.slug}`}
                 className="group flex-shrink-0 w-full md:w-[calc(33.333%-11px)] bg-white border border-border rounded-xl overflow-hidden hover:border-border hover:shadow-md transition-all duration-200 flex flex-col"
                 aria-label={`${t.carousel.viewDetails[lang]} ${event.name}`}
+                onMouseEnter={() => { isPausedRef.current = true }}
+                onMouseLeave={() => { isPausedRef.current = false }}
               >
                 {/* Poster */}
                 <div className="aspect-[4/5] overflow-hidden bg-background">
@@ -124,7 +174,7 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
           {Array.from({ length: maxIndex + 1 }).map((_, i) => (
             <button
               key={i}
-              onClick={() => setCurrentIndex(i)}
+              onClick={() => goToSlide(i)}
               className={`h-px rounded-none transition-all duration-300 ${
                 i === currentIndex ? 'w-8 bg-primary' : 'w-4 bg-border'
               }`}
