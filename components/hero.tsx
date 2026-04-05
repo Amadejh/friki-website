@@ -26,7 +26,7 @@ export default function Hero() {
         <div className="absolute bottom-0 left-0 px-8 lg:px-16 pb-10 md:pb-16">
           {/* Drop friki-logo.png into public/ to replace this text logo */}
           <span className="text-foreground text-4xl md:text-5xl font-bold tracking-tight font-mono">FRIKI</span>
-          <p className="text-primary text-xs font-semibold uppercase tracking-[0.2em] mt-3 font-mono">
+          <p className="text-primary text-sm font-semibold uppercase tracking-[0.2em] mt-3 font-mono">
             Študentsko društvo FRI · Ljubljana, Slovenija
           </p>
         </div>
@@ -41,7 +41,7 @@ export default function Hero() {
           <h1 className="text-foreground text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-4 max-w-2xl">
             {t.hero.heading[lang]}
           </h1>
-          <p className="text-muted-foreground text-base leading-relaxed max-w-2xl">
+          <p className="text-muted-foreground text-lg leading-relaxed max-w-2xl">
             {t.hero.body[lang]}
           </p>
         </div>
