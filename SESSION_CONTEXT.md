@@ -1,6 +1,6 @@
 # FRIKI WEBSITE — Session Context
 *Read this before every Claude Code session. Source of truth for current build state.*
-*Last updated: Session 4 — April 4, 2026*
+*Last updated: Session 5 — April 5, 2026*
 
 ---
 
@@ -28,11 +28,11 @@ Phase 3  ⬜  Admin UI — password-protected event/gallery management (future)
 
 ## GIT WORKFLOW
 
-**Active branches:** `main`
+**Active branches:** `main`, **`feature/sanity-setup`** (current — Sanity CMS scaffold)
 
-**Current branch:** `main`  
+**Current branch:** `feature/sanity-setup`  
 **Remote:** `https://github.com/Amadejh/friki-website.git`  
-**Last commit on main:** `docs: update README — tighter spec, add doc pointers`  
+**Last commit on main:** `chore: add GitHub remote to SESSION_CONTEXT`  
 **Merged:** `feature/ui-palette-dimmed` → `main` (Session 4)
 
 **Branch naming:** `feature/ui-*`, `feature/*`, `feature/api-*`, `fix/*`, `feature/i18n-*`, `chore/*`
@@ -82,6 +82,13 @@ All API keys empty until services are connected. See `.env.example`.
 | `lib/language-context.tsx` | ✅ | SL/EN + localStorage |
 | `lib/translations.ts` | ✅ | Copy strings |
 | `lib/utils.ts` | ✅ | `cn()` |
+| `sanity.config.ts` | ✅ | Sanity Studio config — project `vwe4wudl`, dataset `production` |
+| `schemas/event.ts` | ✅ | Event document schema |
+| `schemas/index.ts` | ✅ | Schema barrel export |
+| `lib/sanity/client.ts` | ✅ | `sanityClient` (read-only, CDN) |
+| `lib/sanity/image.ts` | ✅ | `urlFor()` image URL builder |
+| `lib/sanity/queries.ts` | ✅ | GROQ queries: upcoming, archive, by-slug, all-slugs |
+| `app/studio/[[...tool]]/page.tsx` | ✅ | Embedded Sanity Studio at `/studio` |
 | `lib/config.ts` | ⬜ | Planned |
 | `lib/config.server.ts` | ⬜ | Planned |
 | `lib/supabase-client.ts` | ⬜ | Planned |
@@ -97,9 +104,11 @@ All API keys empty until services are connected. See `.env.example`.
 
 ## WHAT TO BUILD NEXT
 
-Event detail and homepage are mock-driven. **Next:** Phase **1f** — lib scaffolding (`config`, Supabase and Stripe clients with safe placeholders, Resend wrapper) so API routes can be added without surprise build failures.
+Sanity CMS is scaffolded — client, schema, queries, embedded Studio at `/studio`. **Components still use `lib/data.ts` mock data.** Wiring components to Sanity is the next step.
 
-Then: `/events` index (Phase 1g), Stripe flow (1h–1i), remaining pages (1j), Supabase data (1k), polish (1l).
+Next after wiring: Phase **1f** — lib scaffolding (`config`, Supabase and Stripe clients with safe placeholders, Resend wrapper) so API routes can be added without surprise build failures.
+
+Then: `/events` index (Phase 1g), Stripe flow (1h–1i), remaining pages (1j), polish (1l).
 
 ---
 
@@ -115,6 +124,21 @@ Then: `/events` index (Phase 1g), Stripe flow (1h–1i), remaining pages (1j), S
 ---
 
 ## SESSION LOG
+
+### Session 5 — April 5, 2026 — Sanity CMS scaffold (`feature/sanity-setup`)
+
+- Installed `sanity`, `next-sanity`, `@sanity/image-url`, `@sanity/vision`.
+- `sanity.config.ts`: studio config, project `vwe4wudl`, dataset `production`.
+- `schemas/event.ts`: full event document schema (name, slug, date, time, location, organizer, category, year, teaser, description, poster, isArchived, ticketsAvailable, ticketPrice).
+- `lib/sanity/client.ts`: read-only CDN client.
+- `lib/sanity/image.ts`: `urlFor()` builder — fixed import from `@sanity/image-url` (not sub-path).
+- `lib/sanity/queries.ts`: GROQ for upcoming events, archive events, event by slug, all slugs.
+- `app/studio/[[...tool]]/page.tsx`: embedded Studio route.
+- `next.config.mjs`: added `remotePatterns` for `cdn.sanity.io`.
+- `.env.example`: added Sanity section (`NEXT_PUBLIC_SANITY_PROJECT_ID`, `NEXT_PUBLIC_SANITY_DATASET`, `SANITY_API_TOKEN`).
+- `agent_docs/stack.md`: Sanity packages + Studio route noted.
+- `npx tsc --noEmit` passes clean.
+- **Components still use `lib/data.ts` mock data** — Sanity data wiring is a separate step.
 
 ### Session 4 — April 4, 2026 — Merge + README (`main`)
 
