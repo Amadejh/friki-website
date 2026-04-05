@@ -57,14 +57,14 @@ export default function Footer() {
             <p className="text-muted-foreground text-base leading-relaxed max-w-xs">
               {t.footer.desc[lang]}
             </p>
-            <p className="text-border text-sm font-mono">
+            <p className="text-primary text-sm font-mono">
               Večna pot 113, 1000 Ljubljana, SI
             </p>
           </div>
 
           {/* Quick links */}
           <nav aria-label="Footer navigation">
-            <p className="text-border font-mono text-sm uppercase tracking-[0.2em] mb-5">
+            <p className="text-primary font-mono text-sm uppercase tracking-[0.2em] mb-5">
               {t.footer.navigate[lang]}
             </p>
             <ul className="flex flex-col gap-2.5">
@@ -84,7 +84,7 @@ export default function Footer() {
 
           {/* Social */}
           <div>
-            <p className="text-border font-mono text-sm uppercase tracking-[0.2em] mb-5">
+            <p className="text-primary font-mono text-sm uppercase tracking-[0.2em] mb-5">
               {t.footer.connect[lang]}
             </p>
             <div className="flex items-center gap-3">
@@ -115,10 +115,10 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-border text-sm font-mono">
+          <p className="text-primary text-sm font-mono">
             &copy; 2025–2026 Friki &ndash; Študentsko društvo FRI
           </p>
-          <p className="text-border text-sm font-mono">
+          <p className="text-primary text-sm font-mono">
             FRI &middot; Univerza v Ljubljani
           </p>
         </div>
