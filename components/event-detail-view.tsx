@@ -83,7 +83,7 @@ export function View({ event }: EventDetailProps) {
 
           {/* Sidebar — event details */}
           <aside className="lg:col-span-1">
-            <div className="bg-card border border-border rounded-xl p-6 sticky top-24">
+            <div className="bg-card border border-border rounded-xl p-6 md:sticky md:top-24">
               <h2 className="text-border font-mono text-xs uppercase tracking-[0.2em] mb-6">
                 {t.detail.eventDetails[lang]}
               </h2>
