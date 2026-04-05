@@ -116,10 +116,10 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-primary text-sm font-mono">
-            &copy; 2025–2026 Friki &ndash; Študentsko društvo FRI
+            {t.footer.copyright[lang]}
           </p>
           <p className="text-primary text-sm font-mono">
-            FRI &middot; Univerza v Ljubljani
+            {t.footer.university[lang]}
           </p>
         </div>
       </div>

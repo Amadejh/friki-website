@@ -18,7 +18,10 @@ export const t = {
       EN: 'FRIKi is the student association of the Faculty of Computer and Information Science at the University of Ljubljana. We represent student interests, organise events, and build community within FRI.',
     },
   },
-  // Events carousel
+  // Hero subtitle
+  heroSubtitle: {
+    tagline: { SL: 'Študentsko društvo FRI · Ljubljana, Slovenija', EN: 'Student Association FRI · Ljubljana, Slovenia' },
+  },
   carousel: {
     eyebrow: { SL: 'Kaj se dogaja', EN: "What's On" },
     heading: { SL: 'Prihodnji dogodki', EN: 'Upcoming Events' },
@@ -56,6 +59,8 @@ export const t = {
       SL: 'Študentsko društvo Fakultete za računalništvo in informatiko Univerze v Ljubljani.',
       EN: 'The student association of the Faculty of Computer and Information Science, University of Ljubljana.',
     },
+    copyright: { SL: '© 2025–2026 Friki – Študentsko društvo FRI', EN: '© 2025–2026 Friki – Student Association FRI' },
+    university: { SL: 'FRI · Univerza v Ljubljani', EN: 'FRI · University of Ljubljana' },
     questions: { SL: 'Vprašanja?', EN: 'Questions?' },
     getInTouch: { SL: 'Stopite v stik.', EN: 'Get in touch.' },
     home: { SL: 'Domov', EN: 'Home' },
