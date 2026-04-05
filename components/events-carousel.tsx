@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ChevronLeft, ChevronRight, MapPin, Calendar } from 'lucide-react'
@@ -17,14 +17,52 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
   const totalVisible = 3
   const maxIndex = Math.max(0, events.length - totalVisible)
 
-  const prev = () => setCurrentIndex((i) => Math.max(0, i - 1))
-  const next = () => setCurrentIndex((i) => Math.min(maxIndex, i + 1))
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const isPausedRef = useRef(false)
+
+  const stopInterval = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
+  }, [])
+
+  const startInterval = useCallback(() => {
+    stopInterval()
+    intervalRef.current = setInterval(() => {
+      if (!isPausedRef.current) {
+        setCurrentIndex((i) => (i >= maxIndex ? 0 : i + 1))
+      }
+    }, 4000)
+  }, [maxIndex, stopInterval])
+
+  useEffect(() => {
+    startInterval()
+    return stopInterval
+  }, [startInterval, stopInterval])
+
+  const prev = useCallback(() => {
+    setCurrentIndex((i) => Math.max(0, i - 1))
+    startInterval()
+  }, [startInterval])
+
+  const next = useCallback(() => {
+    setCurrentIndex((i) => (i >= maxIndex ? 0 : i + 1))
+    startInterval()
+  }, [maxIndex, startInterval])
+
+  const goToSlide = useCallback((i: number) => {
+    setCurrentIndex(i)
+    startInterval()
+  }, [startInterval])
 
   return (
     <section
       id="events"
       className="w-full bg-card border-t border-border py-16 md:py-24 overflow-hidden"
       aria-label={t.carousel.heading[lang]}
+      onMouseEnter={() => { isPausedRef.current = true }}
+      onMouseLeave={() => { isPausedRef.current = false }}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Heading row */}
@@ -53,7 +91,6 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
           <button
             type="button"
             onClick={next}
-            disabled={currentIndex >= maxIndex}
             aria-label={t.carousel.nextEvents[lang]}
             className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-9 h-20 md:w-12 md:h-24 rounded-full border border-border bg-white/95 text-muted-foreground shadow-sm hover:border-primary hover:text-primary transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center"
           >
@@ -124,7 +161,7 @@ export default function EventsCarousel({ events }: { events: SanityEvent[] }) {
           {Array.from({ length: maxIndex + 1 }).map((_, i) => (
             <button
               key={i}
-              onClick={() => setCurrentIndex(i)}
+              onClick={() => goToSlide(i)}
               className={`h-px rounded-none transition-all duration-300 ${
                 i === currentIndex ? 'w-8 bg-primary' : 'w-4 bg-border'
               }`}

@@ -73,6 +73,27 @@
   --color-deep-red-dark: #C42A26;
 }
 
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@theme inline {
+  --animate-fade-in-up: fade-in-up 0.3s ease-out both;
+}
+
+@layer utilities {
+  .animate-fade-in-up {
+    animation: var(--animate-fade-in-up);
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
