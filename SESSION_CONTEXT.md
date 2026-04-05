@@ -28,30 +28,16 @@ Phase 3  ⬜  Admin UI — password-protected event/gallery management (future)
 
 ## GIT WORKFLOW
 
-**Active branches (all unmerged, all local):**
-- `main` — initial scaffold + README + ui-palette-dimmed merged
-- `feature/ui-palette-dimmed` — palette shift, token cleanup, bento archive, roundness
-- `feature/sanity-setup` — Sanity CMS scaffold + live data wiring
-- `feature/ui-animations` — auto-rotating carousel, card-level hover pause, arrow repositioning
-- `feature/archive-anim-staggered` — directional assembly animation (the chosen one) ✅ **CURRENT**
-- `feature/archive-anim-simultaneous` — unused alternate animation branch
+**Active branches:** `main` only
 
-**Current branch:** `feature/archive-anim-staggered`
+**Current branch:** `main`
 **Remote:** `https://github.com/Amadejh/friki-website.git`
 
-**Pending:** All feature branches need to be merged into `main` in order and pushed.
+All feature branches merged and deleted. `main` is in sync with `origin/main`.
 
-**Merge order:**
-```
-git checkout main
-git merge --no-ff feature/ui-palette-dimmed
-git merge --no-ff feature/sanity-setup
-git merge --no-ff feature/ui-animations
-git merge --no-ff feature/archive-anim-staggered
-git branch -d feature/archive-anim-simultaneous
-git push origin main
-git push origin --delete feature/archive-anim-simultaneous
-```
+**Branch naming:** `feature/ui-*`, `feature/*`, `feature/api-*`, `fix/*`, `feature/i18n-*`, `chore/*`
+
+**Flow:** feature branches → merge into `main` → push → Vercel deploys automatically.
 
 ---
 
@@ -139,6 +125,13 @@ Then: `/events` index (Phase 1g), Stripe flow (1h–1i), remaining pages (1j), p
 ---
 
 ## SESSION LOG
+
+### Session 7 — April 5, 2026 — All feature branches merged into main
+
+- All feature branches merged into `main` in order: `ui-palette-dimmed` → `sanity-setup` → `ui-animations` → `archive-anim-staggered`.
+- Conflicts in `SESSION_CONTEXT.md` and `components/footer.tsx` resolved by keeping the newer branch's version.
+- `feature/archive-anim-simultaneous` (discarded A/B variant) force-deleted locally; was never pushed to remote.
+- All local feature branches deleted. `main` pushed to `origin/main`.
 
 ### Session 6 — April 5, 2026 — Final code sweep + doc update
 
