@@ -28,12 +28,12 @@ Phase 3  ⬜  Admin UI — password-protected event/gallery management (future)
 
 ## GIT WORKFLOW
 
-**Active branches:** `main`, **`feature/sanity-setup`** (current — Sanity CMS scaffold)
+**Active branches:** `main`, `feature/sanity-setup` (both pushed to remote)
 
 **Current branch:** `feature/sanity-setup`  
 **Remote:** `https://github.com/Amadejh/friki-website.git`  
-**Last commit on main:** `chore: add GitHub remote to SESSION_CONTEXT`  
-**Merged:** `feature/ui-palette-dimmed` → `main` (Session 4)
+**Last commit on main:** `feat: Sanity CMS integration — schema, studio, live data` (merge commit)  
+**Merged:** `feature/sanity-setup` → `main` (Session 5) · `feature/ui-palette-dimmed` → `main` (Session 4)
 
 **Branch naming:** `feature/ui-*`, `feature/*`, `feature/api-*`, `fix/*`, `feature/i18n-*`, `chore/*`
 
