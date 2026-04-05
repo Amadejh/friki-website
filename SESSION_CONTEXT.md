@@ -11,14 +11,14 @@ Phase 0  ✅  Initial scaffold — Next.js 16, shadcn/ui, IBM Plex fonts
 Phase 1a ✅  Light theme — CSS variables, globals.css, @theme inline, Tailwind v4
 Phase 1b ✅  Layout & navigation — Navbar (mobile drawer, lang toggle, section observer), Footer
 Phase 1c ✅  Hero — cinematic team photo + identity block + about strip
-Phase 1d ✅  Homepage sections — EventsCarousel (carousel + mock data), Archive (grid + modal + search)
-Phase 1e ✅  Event detail page — /events/[slug] with sidebar, breadcrumbs, hero image
+Phase 1d ✅  Homepage sections — EventsCarousel (carousel + Sanity), Archive (bento grid + modal + search + Sanity)
+Phase 1e ✅  Event detail page — /events/[slug] with sidebar, breadcrumbs, hero image (Sanity)
 Phase 1f ⬜  Lib scaffolding — config.ts, supabase-client/server, stripe, resend clients
 Phase 1g ⬜  Events page — /events list (server component)
 Phase 1h ⬜  Stripe ticket purchase flow — TicketModal + /api/checkout + /api/webhook
 Phase 1i ⬜  Success page + Resend email — /tickets/success, QR code, confirmation email
 Phase 1j ⬜  Remaining pages — /merch (coming-soon), past-events dedicated page
-Phase 1k ⬜  Connect real data — replace lib/data.ts mock data with Supabase queries
+Phase 1k ✅  Connect real data — all components wired to Sanity; lib/data.ts deleted
 Phase 1l ⬜  Polish — loading states, empty states, error boundaries, mobile QA, reduced motion
 Phase 2  ⬜  Bilingual (SL/EN) via next-intl — URL-based routing, replace context-based toggle
 Phase 3  ⬜  Admin UI — password-protected event/gallery management (future)
@@ -78,7 +78,8 @@ All API keys empty until services are connected. See `.env.example`.
 | `components/event-detail-view.tsx` | ✅ | |
 | `components/theme-provider.tsx` | ✅ | Present but **unused** (next-themes) |
 | `components/ui/*` | ✅ | shadcn — not imported by custom pages yet |
-| `lib/data.ts` | ✅ | Mock events |
+| `lib/data.ts` | 🗑️ | **Deleted** — replaced by Sanity queries |
+| `lib/sanity/types.ts` | ✅ | `SanityEvent` interface |
 | `lib/language-context.tsx` | ✅ | SL/EN + localStorage |
 | `lib/translations.ts` | ✅ | Copy strings |
 | `lib/utils.ts` | ✅ | `cn()` |
@@ -104,7 +105,7 @@ All API keys empty until services are connected. See `.env.example`.
 
 ## WHAT TO BUILD NEXT
 
-Sanity CMS is scaffolded — client, schema, queries, embedded Studio at `/studio`. **Components still use `lib/data.ts` mock data.** Wiring components to Sanity is the next step.
+Sanity CMS is fully wired. All components fetch live data from Sanity (`revalidate = 60`). `lib/data.ts` is deleted. Images use `urlFor()` with `/placeholder.jpg` fallback.
 
 Next after wiring: Phase **1f** — lib scaffolding (`config`, Supabase and Stripe clients with safe placeholders, Resend wrapper) so API routes can be added without surprise build failures.
 
@@ -124,6 +125,17 @@ Then: `/events` index (Phase 1g), Stripe flow (1h–1i), remaining pages (1j), p
 ---
 
 ## SESSION LOG
+
+### Session 5 (cont.) — April 5, 2026 — Wire components to Sanity (`feature/sanity-setup`)
+
+- `lib/sanity/types.ts`: `SanityEvent` interface (replaces `Event` from `lib/data.ts`).
+- `app/page.tsx`: converted to async server component; fetches `upcomingEvents` + `archiveEvents` from Sanity in parallel; `revalidate = 60`.
+- `components/events-carousel.tsx`: accepts `events: SanityEvent[]` prop; poster uses `urlFor().width(400).height(500).url()` with `/placeholder.jpg` fallback.
+- `components/archive.tsx`: accepts `events: SanityEvent[]` prop; bento card poster uses `urlFor`; modal gallery replaced with single poster image; `getGallerySeeds` removed.
+- `components/event-detail-view.tsx`: `Event` → `SanityEvent`; hero uses `urlFor().width(1400).height(840).url()`.
+- `app/events/[slug]/page.tsx`: fetches by slug from Sanity; `generateStaticParams` from `allEventSlugsQuery`; `revalidate = 60`.
+- `lib/data.ts`: deleted — zero remaining `@/lib/data` imports confirmed.
+- `npx tsc --noEmit` passes clean.
 
 ### Session 5 — April 5, 2026 — Sanity CMS scaffold (`feature/sanity-setup`)
 

@@ -2,12 +2,12 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
-import type { Event } from '@/lib/data'
-import { archiveEvents } from '@/lib/data'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import { useLang } from '@/lib/language-context'
 import { t, lineupByCategory } from '@/lib/translations'
 import { cn } from '@/lib/utils'
+import { urlFor } from '@/lib/sanity/image'
+import type { SanityEvent } from '@/lib/sanity/types'
 
 const eventsPerPage = 9
 const animationDurationMs = 250
@@ -26,26 +26,22 @@ const BENTO_LAYOUT = [
   { colSpan: 'col-span-2', rowSpan: 'row-span-1' }, // 8: wide  — bottom-right
 ] as const
 
-function getGallerySeeds(event: Event) {
-  return [0, 1, 2, 3].map((i) => event.posterSeed + i * 13)
-}
-
-export default function Archive() {
+export default function Archive({ events }: { events: SanityEvent[] }) {
   const [query, setQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(0)
   const { lang } = useLang()
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
-    if (!q) return archiveEvents
-    return archiveEvents.filter((e) => {
+    if (!q) return events
+    return events.filter((e) => {
       return (
         e.name.toLowerCase().includes(q) ||
         e.location.toLowerCase().includes(q) ||
         e.date.toLowerCase().includes(q)
       )
     })
-  }, [query])
+  }, [query, events])
 
   const totalPages = useMemo(() => Math.max(1, Math.ceil(filtered.length / eventsPerPage)), [filtered.length])
 
@@ -58,7 +54,7 @@ export default function Archive() {
   }, [totalPages])
 
   const slides = useMemo(() => {
-    const result: Event[][] = []
+    const result: SanityEvent[][] = []
     for (let page = 0; page < totalPages; page += 1) {
       const start = page * eventsPerPage
       const end = start + eventsPerPage
@@ -68,7 +64,7 @@ export default function Archive() {
   }, [filtered, totalPages])
 
   // Modal state
-  const [modalEvent, setModalEvent] = useState<Event | null>(null)
+  const [modalEvent, setModalEvent] = useState<SanityEvent | null>(null)
   const [modalOrigin, setModalOrigin] = useState<Rect | null>(null)
   const [modalEnd, setModalEnd] = useState<Rect | null>(null)
   const [modalExpanded, setModalExpanded] = useState(false)
@@ -100,7 +96,7 @@ export default function Archive() {
     }
   }, [modalEvent])
 
-  const openModal = (event: Event, originEl: HTMLElement) => {
+  const openModal = (event: SanityEvent, originEl: HTMLElement) => {
     const origin = originEl.getBoundingClientRect()
     const padding = 16
     const width = Math.min(960, window.innerWidth - padding * 2)
@@ -199,7 +195,7 @@ export default function Archive() {
                           aria-label={`${t.archive.openDetails[lang]} ${event.name}`}
                         >
                           <Image
-                            src={`https://picsum.photos/seed/${event.posterSeed}/900/700`}
+                            src={event.poster ? urlFor(event.poster).width(900).height(700).url() : '/placeholder.jpg'}
                             alt={event.name}
                             fill
                             unoptimized
@@ -319,22 +315,19 @@ export default function Archive() {
                     <h4 className="text-border font-mono text-xs uppercase tracking-[0.2em] mb-3">
                       {t.archive.galleryHeading[lang]}
                     </h4>
-                    <div className="grid grid-cols-2 gap-3">
-                      {getGallerySeeds(modalEvent).map((seed) => (
-                        <div
-                          key={seed}
-                          className="relative aspect-[4/3] rounded-md overflow-hidden border border-border"
-                        >
-                          <Image
-                            src={`https://picsum.photos/seed/${seed}/800/600`}
-                            alt={`${modalEvent.name} photo`}
-                            fill
-                            unoptimized
-                            className="object-cover"
-                          />
-                        </div>
-                      ))}
-                    </div>
+                    {modalEvent.poster ? (
+                      <div className="relative aspect-[4/3] rounded-md overflow-hidden border border-border">
+                        <Image
+                          src={urlFor(modalEvent.poster).width(800).height(600).url()}
+                          alt={modalEvent.name}
+                          fill
+                          unoptimized
+                          className="object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <p className="text-muted-foreground text-sm font-mono">No images available.</p>
+                    )}
                   </div>
 
                   <div className="mt-8">
